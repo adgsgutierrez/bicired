@@ -4,12 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/background_login"
+    android:background="@color/backgroundApp"
     android:orientation="vertical"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    android:paddingTop="200dp"
+    android:paddingTop="20dp"
     tools:context=".StartActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        app:srcCompat="@drawable/icon" />
 
     <TextView
         android:id="@+id/textView2"
@@ -20,7 +28,7 @@
         android:ems="8"
         android:padding="10dp"
         android:text="@string/holder_user"
-        android:textColor="@color/primaryText"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -44,7 +52,7 @@
         android:ems="8"
         android:padding="10dp"
         android:text="@string/holder_key"
-        android:textColor="@color/primaryText"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
 

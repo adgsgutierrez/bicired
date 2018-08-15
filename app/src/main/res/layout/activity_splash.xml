@@ -3,28 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#333333"
+    android:background="@color/backgroundSplash"
     tools:context=".SplashActivity">
 
-    <VideoView
-        android:id="@+id/videoView"
+    <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_width="match_parent" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="30dp"
-        android:background="@color/dividerColor"
-        android:gravity="bottom"
-        android:paddingBottom="15dp"
-        android:paddingTop="15dp"
-        android:text="@string/load_rutas"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="15dp"
-        android:textStyle="bold" />
+        android:src="@drawable/bikerdribbble"
+        />
 </FrameLayout>
