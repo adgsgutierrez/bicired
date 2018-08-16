@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Bici Red</string>
+
+    <string name="holder_user">Usuario</string>
+    <string name="holder_key">Clave</string>
+
+    <string name="place_holder_user">Digite su usuario y/o correo</string>
+    <string name="place_holder_key">Digite la clave</string>
+
+    <string name="load_rutas">Cargando Rutas</string>
+
+    <string name="button_login">Iniciar Sesión</string>
+    <string name="button_register">Registrarme</string>
+    <string name="title_activity_news">Novedades</string>
+
+    <string name="profile">Perfil</string>
+    <string name="configure">Configuración</string>
 </resources>
