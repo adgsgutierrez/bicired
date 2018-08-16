@@ -2,13 +2,8 @@ package co.com.konrad.bicired;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.widget.VideoView;
-import co.com.konrad.bicired.co.com.konrad.bicired.utils.Constants;
 
 public class SplashActivity extends Activity {
 

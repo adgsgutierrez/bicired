@@ -11,4 +11,8 @@
 
     <string name="button_login">Iniciar Sesión</string>
     <string name="button_register">Registrarme</string>
+    <string name="title_activity_news">Novedades</string>
+
+    <string name="profile">Perfil</string>
+    <string name="configure">Configuración</string>
 </resources>

@@ -1,4 +1,4 @@
-package co.com.konrad.bicired.co.com.konrad.bicired.utils;
+package co.com.konrad.bicired.utils;
 
 public class Constants {
 
