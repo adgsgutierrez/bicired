@@ -11,4 +11,11 @@
 
     <string name="button_login">Iniciar Sesión</string>
     <string name="button_register">Registrarme</string>
+    <string name="title_activity_news">Novedades</string>
+
+    <string name="profile">Perfil</string>
+    <string name="configure">Configuración</string>
+    <string name="go_to">Quiero ir</string>
+
+    <string name="google_maps_key">AIzaSyBzxAxWJLQL1JmmxHuhp6tPxhhIgFuhYS8</string>
 </resources>
