@@ -15,4 +15,11 @@
 
     <string name="profile">Perfil</string>
     <string name="configure">Configuración</string>
+    <string name="go_to">Quiero ir</string>
+
+    <string name="google_maps_key">AIzaSyBzxAxWJLQL1JmmxHuhp6tPxhhIgFuhYS8</string>
+    <string name="title_activity_home">Home</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

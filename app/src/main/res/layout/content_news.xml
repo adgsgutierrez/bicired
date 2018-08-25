@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".view.News"
+    android:background="@color/backgroundApp"
     tools:showIn="@layout/activity_news">
+
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/listNews"
+        android:padding="@dimen/margin"
+        android:layout_margin="@dimen/margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </android.support.constraint.ConstraintLayout>

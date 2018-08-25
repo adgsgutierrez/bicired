@@ -10,8 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
 import co.com.konrad.bicired.R;
+import co.com.konrad.bicired.logic.NewDao;
+import co.com.konrad.bicired.logic.NewsDao;
 import co.com.konrad.bicired.utils.Constants;
 
 public class News extends AppCompatActivity {
@@ -23,6 +26,12 @@ public class News extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ListView listview = (ListView) findViewById(R.id.listNews);
+        NewsDao newsDao = new NewsDao();
+        newsDao.initNewDao();
+
+        MapAdapter map = new MapAdapter(this, R.layout.adapter_map ,newsDao.getNewDao());
+        listview.setAdapter(map);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +55,7 @@ public class News extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.profile_bar:
                 Log.d(Constants.TAG_LOG, "Ingresando al profile");
+
                 break;
 
         }
