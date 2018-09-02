@@ -11,13 +11,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="95dp">
+        tools:layout_editor_absoluteY="95dp"
+        tools:ignore="MissingConstraints">
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            android:layout_height="71dp"
+            app:srcCompat="@drawable/login" />
 
         <TextView
             android:id="@+id/textView2"
@@ -81,19 +82,12 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btn1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Volver" />
+                android:text="volver a inicio" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/btn1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
