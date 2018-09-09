@@ -44,10 +44,7 @@ public class Home extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         Button boton_ir =(Button) findViewById(R.id.button_goto);
 
-        boton_ir.setOnClickListener(new View.OnClickListener(){
 
-
-        });
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
