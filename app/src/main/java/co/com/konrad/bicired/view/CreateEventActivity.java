@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
+import android.graphics.Camera;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,13 +13,20 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 
 import co.com.konrad.bicired.R;
 
-public class CreateEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
+public class CreateEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnMapReadyCallback {
 
+    GoogleMap map;
     Button btn_fecha;
     TextView textfecha;
     int day,month,year,hour,minutes;
@@ -28,6 +36,10 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event2);
+
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
+        mapFragment.getMapAsync(this);
 
         btn_fecha = (Button) findViewById(R.id.btnfecha);
         textfecha =(TextView) findViewById(R.id.textfecha);
@@ -68,5 +80,13 @@ timePickerDialog.show();
     minutes = i1;
 
         textfecha.setText(dayFinal+"/"+monthFinal+"/"+yearFinal+" "+hourFinal+":"+minutes);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        float zoomLevel = 14.0f;
+        LatLng bogota = new LatLng(4.710988599999999, -74.072092);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(bogota, zoomLevel));
     }
 }
