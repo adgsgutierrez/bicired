@@ -23,5 +23,9 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_maps">Map</string>
-
+    <string name="nombrec">Nombre Completo</string>
+    <string name="correo">Correo</string>
+    <string name="genero">Genero</string>
+    <string name="conformarc">Confirmar Clave</string>
+    <string name="cancelar">Cancelar</string>
 </resources>

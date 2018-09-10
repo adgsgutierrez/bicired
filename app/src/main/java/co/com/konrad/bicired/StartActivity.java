@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import co.com.konrad.bicired.view.News;
+import co.com.konrad.bicired.view.RegisterActivity;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -17,6 +18,10 @@ public class StartActivity extends AppCompatActivity {
 
     public void onLogin(View v){
         Intent intent = new Intent(this, News.class);
+        startActivity(intent);
+    }
+    public void onRegister(View v){
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 }

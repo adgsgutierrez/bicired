@@ -85,5 +85,6 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:background="@drawable/button_secondary"
+        android:onClick="onRegister"
         android:text="@string/button_register" />
 </android.widget.LinearLayout>
