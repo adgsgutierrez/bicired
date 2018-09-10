@@ -2,6 +2,7 @@ package co.com.konrad.bicired.view;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -55,6 +56,11 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             }
         });
 
+    }
+
+    public void Guardar (View v){
+        Intent intent = new Intent(this,News.class);
+        startActivity(intent);
     }
 
     @Override
