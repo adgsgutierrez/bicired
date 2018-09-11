@@ -15,18 +15,21 @@
 
     <string name="profile">Perfil</string>
     <string name="configure">Configuración</string>
-    <string name="go_to">Quiero ir</string>
+    <string name="go_to">ver mas</string>
 
     <string name="google_maps_key">AIzaSyBzxAxWJLQL1JmmxHuhp6tPxhhIgFuhYS8</string>
     <string name="title_activity_home">Home</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Perfil</string>
     <string name="nombrec">Nombre Completo</string>
     <string name="correo">Correo</string>
+    <string name="telefono">Teléfono</string>
     <string name="genero">Genero</string>
     <string name="conformarc">Confirmar Clave</string>
     <string name="cancelar">Cancelar</string>
     <string name="guardar">Guardar</string>
+    <string name="title_activity_mapa_detalle_ruta">MapaDetalleRuta</string>
+    <string name="title_activity_fotografias_lista">FotografiasLista</string>
 </resources>

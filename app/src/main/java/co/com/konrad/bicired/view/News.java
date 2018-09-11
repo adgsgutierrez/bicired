@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import co.com.konrad.bicired.R;
@@ -41,6 +42,14 @@ public class News extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(News.this,MapaDetalleRuta.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -56,7 +65,8 @@ public class News extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.profile_bar:
                 Log.d(Constants.TAG_LOG, "Ingresando al profile");
-
+                Intent intent = new Intent(this, profileActivity.class);
+                startActivity(intent);
                 break;
 
         }

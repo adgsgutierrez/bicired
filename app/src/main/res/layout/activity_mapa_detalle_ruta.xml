@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.News">
+    tools:context=".view.MapaDetalleRuta">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -20,17 +20,24 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include
-        layout="@layout/content_news"/>
+    <include layout="@layout/content_mapa_detalle_ruta" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fotografias_detalle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@color/dividerColor"
-        app:backgroundTint="@color/dividerColor"
-        app:srcCompat="@drawable/ic_action_add" />
+        android:src="@android:drawable/ic_menu_camera"
+        app:backgroundTint="@android:color/holo_blue_bright" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/volver_mapa"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_menu_revert"
+        app:backgroundTint="@color/dividerColor" />
 
 </android.support.design.widget.CoordinatorLayout>

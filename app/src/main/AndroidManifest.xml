@@ -46,7 +46,7 @@
             android:label="@string/title_activity_news"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Home"
+            android:name=".view.Home"
             android:label="@string/title_activity_home" />
         <activity android:name=".view.CreateEventActivity" />
         <!--
@@ -62,9 +62,18 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.MapsActivity"
+            android:name=".view.profileActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".view.RegisterActivity"></activity>
+        <activity android:name=".view.RegisterActivity" />
+        <activity
+            android:name=".view.MapaDetalleRuta"
+            android:label="@string/title_activity_mapa_detalle_ruta"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".view.FotografiasLista"
+            android:label="@string/title_activity_fotografias_lista"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
