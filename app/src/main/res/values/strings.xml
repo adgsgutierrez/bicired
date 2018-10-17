@@ -32,4 +32,7 @@
     <string name="guardar">Guardar</string>
     <string name="title_activity_mapa_detalle_ruta">MapaDetalleRuta</string>
     <string name="title_activity_fotografias_lista">FotografiasLista</string>
+
+    <string name="mensaje_error_not_inputs">Debes digitar tu usuario y/o clave</string>
+    <string name="ok">Ok</string>
 </resources>
