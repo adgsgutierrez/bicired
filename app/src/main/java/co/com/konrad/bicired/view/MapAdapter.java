@@ -56,7 +56,7 @@ public class MapAdapter extends ArrayAdapter<NewDao> {
         NewDao item = (NewDao) getItem(position);
 
         // TODO replace findViewById by ViewHolder
-        ((TextView) result.findViewById(R.id.descripcion)).setText(item.getPbl_descripcion());
+        ((TextView) result.findViewById(R.id.descripcion)).setText(item.getFk_pbl_usr_correo() +" "+item.getPbl_descripcion());
         ((TextView) result.findViewById(R.id.fecha)).setText(item.getPbl_fecha().toString());
         //GoogleMap visor = (GoogleMap) result.findViewById(R.id.mapa);
         //visor.
