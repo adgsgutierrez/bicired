@@ -10,12 +10,14 @@ public class NewsDao {
     public void initNewDao(){
         this.newDao = new ArrayList();
         for(int i = 0 ; i < 2 ; i++){
+            /**
             NewDao newObject = new NewDao();
             newObject.setUsuario(new UsuarioDao("prueba@prueba.com", "M" , "Prueba" ));
             newObject.setDescripcion("Ruta de Prueba "+(i+1));
             newObject.setFechaEvento(new Date());
             newObject.setRuta("https://www.google.com/maps/dir/4.6503152,-74.0614899/4.6590839,-74.0621336/@4.6513632,-74.0681418,15z/data=!4m2!4m1!3e3");
             this.newDao.add(newObject);
+             **/
         }
     }
 

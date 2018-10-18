@@ -140,5 +140,4 @@
                 android:text="@string/cancelar" />
         </LinearLayout>
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

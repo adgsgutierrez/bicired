@@ -67,8 +67,19 @@
         android:textColor="@color/primaryText"
         android:inputType="textPassword" />
 
+    <ProgressBar
+        android:id="@+id/cargandoSpiner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:visibility="gone" />
+
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -79,7 +90,7 @@
 
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonRegistro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -88,4 +99,6 @@
         android:text="@string/button_register"
         android:textColor="@android:color/background_light"
         android:textColorLink="@color/dividerColor" />
+
+
 </android.widget.LinearLayout>

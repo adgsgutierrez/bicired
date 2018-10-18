@@ -35,4 +35,7 @@
 
     <string name="mensaje_error_not_inputs">Debes digitar tu usuario y/o clave</string>
     <string name="ok">Ok</string>
+
+    <string name="MENSAJE_ERROR_TIME">Revisa tu conexión a internet</string>
+    <string name="MENSAJE_ERROR_GENERAL">Estamos teniendo inconvenientes técnicos, reintenta más tarde</string>
 </resources>

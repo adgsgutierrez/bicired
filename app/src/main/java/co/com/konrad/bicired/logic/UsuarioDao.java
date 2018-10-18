@@ -2,15 +2,16 @@ package co.com.konrad.bicired.logic;
 
 public class UsuarioDao {
 
+    private String nombre;
     private String correo;
     private String genero;
-    private String nombre;
-    private String clave;
+    private String foto;
 
-    public UsuarioDao(String correo, String genero, String nombre) {
+    public UsuarioDao(String correo, String genero, String nombre , String foto) {
         this.correo = correo;
         this.genero = genero;
         this.nombre = nombre;
+        this.foto = foto;
     }
 
     public String getCorreo() {
@@ -37,20 +38,21 @@ public class UsuarioDao {
         this.nombre = nombre;
     }
 
-    public String getClave() {
-        return clave;
+    public String getFoto() {
+        return foto;
     }
 
-    public void setClave(String clave) {
-        this.clave = clave;
+    public void setFoto(String clave) {
+        this.foto = clave;
     }
 
     @Override
     public String toString() {
-        return "Usuario{" +
+        return "UsuarioDao{" +
                 "correo='" + correo + '\'' +
                 ", genero='" + genero + '\'' +
                 ", nombre='" + nombre + '\'' +
+                ", foto='" + foto + '\'' +
                 '}';
     }
 }

@@ -9,6 +9,17 @@
     android:background="@color/backgroundApp"
     tools:showIn="@layout/activity_news">
 
+    <ProgressBar
+        android:id="@+id/cargandoSpinerNews"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:visibility="gone" />
+
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listNews"
         android:padding="@dimen/margin"

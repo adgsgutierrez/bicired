@@ -1,9 +1,11 @@
 package co.com.konrad.bicired.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,13 +15,31 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import co.com.konrad.bicired.R;
-import co.com.konrad.bicired.logic.NewDao;
+import co.com.konrad.bicired.StartActivity;
 import co.com.konrad.bicired.logic.NewsDao;
+import co.com.konrad.bicired.logic.ResponseDao;
+import co.com.konrad.bicired.logic.UsuarioDao;
 import co.com.konrad.bicired.utils.Constants;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class News extends AppCompatActivity {
+
+    private ListView items;
+    private ProgressBar spiner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +47,74 @@ public class News extends AppCompatActivity {
         setContentView(R.layout.activity_news);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //Capturando datos del Login
+        Intent myIntent = getIntent();
+        String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
+        Log.d(Constants.TAG_LOG , datos);
+        Gson gson = new Gson();
+        UsuarioDao user = gson.fromJson(datos.trim() , UsuarioDao.class);
+        //Creando Enlace con las vistas
+        items = (ListView) findViewById(R.id.listNews);
+        spiner = (ProgressBar) findViewById(R.id.cargandoSpinerNews);
 
-        ListView listview = (ListView) findViewById(R.id.listNews);
-        NewsDao newsDao = new NewsDao();
-        newsDao.initNewDao();
+        items.setVisibility(View.GONE);
+        spiner.setVisibility(View.VISIBLE);
 
+        OkHttpClient client = new OkHttpClient()
+                .newBuilder()
+                .connectTimeout(5000 , TimeUnit.MILLISECONDS)
+                .readTimeout(5000 ,TimeUnit.MILLISECONDS)
+                .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
+                .build();
+        RequestBody formBody = new FormBody.Builder()
+                .add("listar", "all")
+                .add("correo", user.getCorreo())
+                .build();
+        Request request = new Request.Builder()
+                .url(Constants.URL_PUBLICACION) // The URL to send the data to
+                .post(formBody)
+                .addHeader("content-type", "application/json; charset=utf-8")
+                .build();
+
+
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                News.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        items.setVisibility(View.VISIBLE);
+                        spiner.setVisibility(View.GONE);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                if(response.isSuccessful()) {
+                    final String data = response.body().string();
+                    News.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(Constants.TAG_LOG , data);
+                            items.setVisibility(View.VISIBLE);
+                            spiner.setVisibility(View.GONE);
+                        }
+                    });
+                }else{
+                    News.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            items.setVisibility(View.VISIBLE);
+                            spiner.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }
+        });
+        /*
         MapAdapter map = new MapAdapter(this, R.layout.adapter_map ,newsDao.getNewDao());
         listview.setAdapter(map);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -50,6 +133,7 @@ public class News extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        */
     }
 
 
