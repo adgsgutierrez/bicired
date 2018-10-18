@@ -1,10 +1,10 @@
 package co.com.konrad.bicired.logic;
 
-public class ResponseDao {
+public class RespuestaDaoLogin {
 
     private Integer codigo;
     private String mensaje;
-    private Object datos;
+    private UsuarioDao datos;
 
     public Integer getCodigo() {
         return codigo;
@@ -22,20 +22,20 @@ public class ResponseDao {
         this.mensaje = mensaje;
     }
 
-    public Object getDatos() {
+    public UsuarioDao getDatos() {
         return datos;
     }
 
-    public void setDatos(Object datos) {
+    public void setDatos(UsuarioDao datos) {
         this.datos = datos;
     }
 
     @Override
     public String toString() {
-        return "ResponseDao{" +
+        return "RespuestaDaoLogin{" +
                 "codigo=" + codigo +
                 ", mensaje='" + mensaje + '\'' +
-                ", datos='" + datos + '\'' +
+                ", datos=" + datos +
                 '}';
     }
 }

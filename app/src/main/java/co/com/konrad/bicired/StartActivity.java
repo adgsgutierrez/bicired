@@ -10,16 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
-import co.com.konrad.bicired.logic.ResponseDao;
-import co.com.konrad.bicired.logic.UsuarioDao;
+import co.com.konrad.bicired.logic.RespuestaDaoLogin;
 import co.com.konrad.bicired.utils.Constants;
 import co.com.konrad.bicired.utils.Utils;
 import co.com.konrad.bicired.view.News;
@@ -110,14 +104,11 @@ public class StartActivity extends AppCompatActivity {
                                 buttonLogin.setVisibility(View.VISIBLE);
                                 spinner.setVisibility(View.GONE);
                                 Gson gson = new Gson();
-                                ResponseDao respuesta = gson.fromJson(data , ResponseDao.class);
+                                RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
                                 if(respuesta.getCodigo() == Constants.SERVICES_OK){
                                     Intent intent = new Intent(getApplicationContext(), News.class);
                                     try {
-                                        JSONObject json = new JSONObject(respuesta.getDatos().toString());
-                                        //String correo, String genero, String nombre , String foto
-                                        UsuarioDao usuario = new UsuarioDao(json.getString("correo") , json.getString("genero") , json.getString("nombre") , json.getString("foto"));
-                                        intent.putExtra(Constants.PREFERENCE_USER , usuario.toString());
+                                        intent.putExtra(Constants.PREFERENCE_USER , respuesta.getDatos().toString());
                                         startActivity(intent);
                                     }catch (Exception ex){
                                         Log.e(Constants.TAG_LOG , ex.getMessage());

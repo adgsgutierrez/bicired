@@ -7,6 +7,10 @@ public class UsuarioDao {
     private String genero;
     private String foto;
 
+    public UsuarioDao(){
+
+    }
+
     public UsuarioDao(String correo, String genero, String nombre , String foto) {
         this.correo = correo;
         this.genero = genero;
@@ -48,7 +52,7 @@ public class UsuarioDao {
 
     @Override
     public String toString() {
-        return "UsuarioDao{" +
+        return "{" +
                 "correo='" + correo + '\'' +
                 ", genero='" + genero + '\'' +
                 ", nombre='" + nombre + '\'' +

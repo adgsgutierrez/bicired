@@ -1,9 +1,6 @@
 package co.com.konrad.bicired.view;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -16,24 +13,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-
 import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
 import co.com.konrad.bicired.R;
-import co.com.konrad.bicired.StartActivity;
-import co.com.konrad.bicired.logic.NewsDao;
-import co.com.konrad.bicired.logic.ResponseDao;
+import co.com.konrad.bicired.logic.ResponseDaoNews;
 import co.com.konrad.bicired.logic.UsuarioDao;
 import co.com.konrad.bicired.utils.Constants;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class News extends AppCompatActivity {
@@ -50,9 +40,8 @@ public class News extends AppCompatActivity {
         //Capturando datos del Login
         Intent myIntent = getIntent();
         String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
-        Log.d(Constants.TAG_LOG , datos);
         Gson gson = new Gson();
-        UsuarioDao user = gson.fromJson(datos.trim() , UsuarioDao.class);
+        UsuarioDao user = gson.fromJson(datos , UsuarioDao.class);
         //Creando Enlace con las vistas
         items = (ListView) findViewById(R.id.listNews);
         spiner = (ProgressBar) findViewById(R.id.cargandoSpinerNews);
@@ -66,13 +55,10 @@ public class News extends AppCompatActivity {
                 .readTimeout(5000 ,TimeUnit.MILLISECONDS)
                 .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
                 .build();
-        RequestBody formBody = new FormBody.Builder()
-                .add("listar", "all")
-                .add("correo", user.getCorreo())
-                .build();
+        String parametros = "?listar=all&correo="+user.getCorreo();
         Request request = new Request.Builder()
-                .url(Constants.URL_PUBLICACION) // The URL to send the data to
-                .post(formBody)
+                .url(Constants.URL_PUBLICACION + parametros) // The URL to send the data to
+                .get()
                 .addHeader("content-type", "application/json; charset=utf-8")
                 .build();
 
@@ -99,6 +85,26 @@ public class News extends AppCompatActivity {
                         @Override
                         public void run() {
                             Log.d(Constants.TAG_LOG , data);
+                            Gson gson = new Gson();
+                            ResponseDaoNews news = gson.fromJson(data , ResponseDaoNews.class);
+                            MapAdapter map = new MapAdapter(getApplicationContext(), R.layout.adapter_map ,news.getNewDao());
+                            items.setAdapter(map);
+                            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                            fab.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(News.this,CreateEventActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+
+                            items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent intent = new Intent(News.this,MapaDetalleRuta.class);
+                                    startActivity(intent);
+                                }
+                            });
                             items.setVisibility(View.VISIBLE);
                             spiner.setVisibility(View.GONE);
                         }
@@ -114,25 +120,8 @@ public class News extends AppCompatActivity {
                 }
             }
         });
-        /*
-        MapAdapter map = new MapAdapter(this, R.layout.adapter_map ,newsDao.getNewDao());
-        listview.setAdapter(map);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(News.this,CreateEventActivity.class);
-                startActivity(intent);
-            }
-        });
+/*
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(News.this,MapaDetalleRuta.class);
-                startActivity(intent);
-            }
-        });
         */
     }
 
