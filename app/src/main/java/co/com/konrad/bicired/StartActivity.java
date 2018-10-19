@@ -39,7 +39,6 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        setContentView(R.layout.activity_profile);
         preferences = getPreferences(Context.MODE_PRIVATE);
         this.correo = ((EditText) findViewById(R.id.usuario));
         this.correo.setHintTextColor(getResources().getColor(R.color.colorAccent));

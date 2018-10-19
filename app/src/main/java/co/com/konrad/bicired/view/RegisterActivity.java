@@ -3,16 +3,35 @@ package co.com.konrad.bicired.view;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import co.com.konrad.bicired.R;
 import co.com.konrad.bicired.StartActivity;
+import co.com.konrad.bicired.logic.RespuestaDaoLogin;
+import co.com.konrad.bicired.utils.Constants;
+import co.com.konrad.bicired.utils.Utils;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
      Spinner Genero;
+     EditText generodefinitivo,nombre,correo,clave,confirmacion_clave;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,18 +39,140 @@ public class RegisterActivity extends AppCompatActivity {
 
         Genero = (Spinner)findViewById(R.id.spinner);
 
+        generodefinitivo = (EditText)findViewById(R.id.genero);
+        nombre = (EditText)findViewById(R.id.nombre_registro);
+        correo = (EditText)findViewById(R.id.correo_registro);
+        clave = (EditText)findViewById(R.id.clave);
+        confirmacion_clave = (EditText)findViewById(R.id.confirmar_clave);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.genero,android.R.layout.simple_spinner_item);
 
         Genero.setAdapter(adapter);
+
+        Genero.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Object item = adapterView.getItemAtPosition(i);
+                Log.d(Constants.TAG_LOG,item.toString());
+
+                if(item.toString().equals("Hombre")){
+                    generodefinitivo.setText("M");
+                }else if(item.toString().equals("Mujer")){
+                    generodefinitivo.setText("F");
+                }
+                Log.d(Constants.TAG_LOG,""+generodefinitivo.getText()+"");
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     public void Register(View v){
-        Intent intent = new Intent(this, News.class);
-        startActivity(intent);
+        String genero = generodefinitivo.getText().toString();
+        String nombre_re = nombre.getText().toString();
+        String clave_re = clave.getText().toString();
+        String clave_re_co = confirmacion_clave.getText().toString();
+        String correo_re = correo.getText().toString();
+
+        Log.d(Constants.TAG_LOG,genero);
+        Log.d(Constants.TAG_LOG,nombre_re);
+        Log.d(Constants.TAG_LOG,clave_re);
+        Log.d(Constants.TAG_LOG,correo_re);
+
+        if(!genero.equals("") && !nombre_re.equals("") && !clave_re.equals("") && !clave_re_co.equals("") && !correo_re.equals("")) {
+             if(clave_re.equals(clave_re_co)){
+                 OkHttpClient client = new OkHttpClient()
+                         .newBuilder()
+                         .connectTimeout(5000 , TimeUnit.MILLISECONDS)
+                         .readTimeout(5000 ,TimeUnit.MILLISECONDS)
+                         .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
+                         .build();
+                 RequestBody formBody = new FormBody.Builder()
+                         .add("correo", correo_re)
+                         .add("nombre", nombre_re)
+                         .add("genero",genero)
+                         .add("clave", clave_re_co)
+                         .build();
+                 Log.d(Constants.TAG_LOG, String.valueOf(formBody));
+                 Request request = new Request.Builder()
+                         .url(Constants.URL_LOGIN) // The URL to send the data to
+                         .post(formBody)
+                         .addHeader("content-type", "application/json; charset=utf-8")
+                         .build();
+                 client.newCall(request).enqueue(new Callback() {
+                     @Override
+                     public void onFailure(Call call, IOException e) {
+                         RegisterActivity.this.runOnUiThread(new Runnable() {
+                             @Override
+                             public void run() {
+
+                                 mostrarError();
+                             }
+                         });
+                     }
+
+                     @Override
+                     public void onResponse(Call call, final Response response) throws IOException {
+
+                         if(response.isSuccessful()) {
+                             final String data = response.body().string();
+                             RegisterActivity.this.runOnUiThread(new Runnable() {
+                                 @Override
+                                 public void run() {
+                                     Gson gson = new Gson();
+
+                                     RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
+                                     Log.d(Constants.TAG_LOG,respuesta.getMensaje());
+                                     Log.d(Constants.TAG_LOG,respuesta.getCodigo().toString());
+                                     Log.d(Constants.TAG_LOG,respuesta.getDatos().toString());
+                                     if(respuesta.getCodigo() == Constants.SERVICES_OK){
+
+                                         Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+                                         try {
+                                             startActivity(intent);
+                                         }catch (Exception ex){
+                                             Log.e(Constants.TAG_LOG , ex.getMessage());
+                                             mostrarError();
+                                         }
+                                     }else{
+                                         mostrarError(respuesta.getMensaje());
+                                     }
+
+                                 }
+                             });
+                         }else{
+                             RegisterActivity.this.runOnUiThread(new Runnable() {
+                                 @Override
+                                 public void run() {
+                                     mostrarError();
+                                 }
+                             });
+                         }
+                     }
+                 });
+             }else{
+
+             }
+        }
+        else{
+
+        }
+
+
     }
 
     public void Cancel (View v){
         Intent intent = new Intent(this, StartActivity.class);
         startActivity(intent);
+    }
+
+    public void mostrarError(){
+        Utils.mostrarAlerta(this , getString(R.string.MENSAJE_ERROR_GENERAL));
+    }
+    public void mostrarError(String mensaje){
+        Utils.mostrarAlerta(this , mensaje);
     }
 }

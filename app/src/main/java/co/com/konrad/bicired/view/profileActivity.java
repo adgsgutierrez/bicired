@@ -22,6 +22,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class profileActivity extends AppCompatActivity {
 
@@ -35,7 +36,7 @@ public class profileActivity extends AppCompatActivity {
 
     @SuppressLint("WrongViewCast")
     @Override
-    protected void onCreate (Bundle BackStart){
+    protected void onCreate(Bundle BackStart) {
 
         super.onCreate(BackStart);
         setContentView(R.layout.activity_profile);
@@ -61,13 +62,13 @@ public class profileActivity extends AppCompatActivity {
 
     }
 
-    public void onProfile (View v){
+    public void onProfile(View v) {
         String usuario = this.nameComplete.getText().toString();
         String email = this.email.getText().toString();
         String cellphone = this.cellphone.getText().toString();
 
 
-        if(!usuario.equals("") && !usuario.equals("")) {
+        if (!usuario.equals("") && !usuario.equals("")) {
 
             this.Buttonsave.setVisibility(View.VISIBLE);
             this.Buttoncancel.setVisibility(View.VISIBLE);
@@ -75,9 +76,9 @@ public class profileActivity extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient()
                     .newBuilder()
-                    .connectTimeout(5000 , TimeUnit.MILLISECONDS)
-                    .readTimeout(5000 ,TimeUnit.MILLISECONDS)
-                    .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
+                    .connectTimeout(5000, TimeUnit.MILLISECONDS)
+                    .readTimeout(5000, TimeUnit.MILLISECONDS)
+                    .writeTimeout(5000, TimeUnit.MILLISECONDS)
                     .build();
             RequestBody formBody = new FormBody.Builder()
                     .add("namecomplete", usuario)
@@ -93,16 +94,26 @@ public class profileActivity extends AppCompatActivity {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    StartActivity.this.runOnUiThread(new Runnable() {
+                    profileActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             nameComplete.setVisibility(View.VISIBLE);
-                            buttonLogin.setVisibility(View.VISIBLE);
-                            spinner.setVisibility(View.GONE);
-                            mostrarError();
-    }
+                        }
 
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+
+                }
+            });
+
+        }
+    }
 }
+
+
 
 
 
