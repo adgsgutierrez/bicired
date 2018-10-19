@@ -39,6 +39,7 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        setContentView(R.layout.activity_profile);
         preferences = getPreferences(Context.MODE_PRIVATE);
         this.correo = ((EditText) findViewById(R.id.usuario));
         this.correo.setHintTextColor(getResources().getColor(R.color.colorAccent));
@@ -142,7 +143,6 @@ public class StartActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
-
 
     public void mostrarError(){
         Utils.mostrarAlerta(this , getString(R.string.MENSAJE_ERROR_GENERAL));
