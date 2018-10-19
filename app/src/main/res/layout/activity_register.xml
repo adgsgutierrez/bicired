@@ -25,7 +25,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/nombre_registro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_rounded_corners"
@@ -48,7 +48,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/correo_registro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_rounded_corners"
@@ -56,6 +56,11 @@
             android:padding="8dp"
             android:textColor="@color/primaryText"
              />
+        <EditText
+            android:id="@+id/genero"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"></EditText>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -106,7 +111,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/editText3"
+                    android:id="@+id/clave"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
@@ -135,7 +140,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/editText4"
+                    android:id="@+id/confirmar_clave"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"

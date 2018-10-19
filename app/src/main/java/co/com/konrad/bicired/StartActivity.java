@@ -141,7 +141,6 @@ public class StartActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     public void mostrarError(){
         Utils.mostrarAlerta(this , getString(R.string.MENSAJE_ERROR_GENERAL));
     }
