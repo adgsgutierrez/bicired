@@ -42,6 +42,7 @@ public class News extends AppCompatActivity {
         String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
         Gson gson = new Gson();
         UsuarioDao user = gson.fromJson(datos , UsuarioDao.class);
+
         //Creando Enlace con las vistas
         items = (ListView) findViewById(R.id.listNews);
         spiner = (ProgressBar) findViewById(R.id.cargandoSpinerNews);
@@ -94,6 +95,9 @@ public class News extends AppCompatActivity {
                                 @Override
                                 public void onClick(View view) {
                                     Intent intent = new Intent(News.this,CreateEventActivity.class);
+                                    Intent myIntent = getIntent();
+                                    String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
+                                    intent.putExtra("dato_correo",datos);
                                     startActivity(intent);
                                 }
                             });

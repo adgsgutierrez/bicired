@@ -34,6 +34,7 @@
     <string name="title_activity_fotografias_lista">FotografiasLista</string>
 
     <string name="mensaje_error_not_inputs">Debes digitar tu usuario y/o clave</string>
+    <string name="mensaje_error_not_inputs2">Debe seleccionar la fecha, la hora y la ruta</string>
     <string name="ok">Ok</string>
 
     <string name="MENSAJE_ERROR_TIME">Revisa tu conexión a internet</string>

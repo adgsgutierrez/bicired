@@ -5,9 +5,11 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,15 +19,33 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+
 import co.com.konrad.bicired.R;
+import co.com.konrad.bicired.StartActivity;
+import co.com.konrad.bicired.logic.RespuestaDaoLogin;
+import co.com.konrad.bicired.logic.UsuarioDao;
+import co.com.konrad.bicired.utils.Constants;
+import co.com.konrad.bicired.utils.Utils;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class CreateEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnMapReadyCallback {
 
     GoogleMap map;
     Button btn_fecha;
     TextView textfecha;
+    EditText lt1,lt2,ln1,ln2;
     int day, month, year, hour, minutes;
     int dayFinal, monthFinal, yearFinal, hourFinal, minutesFinal;
     ArrayList<LatLng> ListPoints;
@@ -41,6 +61,10 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
         btn_fecha = (Button) findViewById(R.id.btnfecha);
         textfecha = (TextView) findViewById(R.id.textfecha);
+        lt1 = (EditText) findViewById(R.id.lt1);
+        lt2 = (EditText) findViewById(R.id.lt2);
+        ln1 = (EditText) findViewById(R.id.ln1);
+        ln2 = (EditText) findViewById(R.id.ln2);
 
         btn_fecha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,8 +83,96 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     }
 
     public void Guardar (View v){
-        Intent intent = new Intent(this,News.class);
-        startActivity(intent);
+        String fecha = textfecha.getText().toString();
+        String lt1 = this.lt1.getText().toString();
+        String lt2 = this.lt2.getText().toString();
+        String ln1 = this.ln1.getText().toString();
+        String ln2 = this.ln2.getText().toString();
+        Intent myIntent = getIntent();
+        String datos = myIntent.getStringExtra("dato_correo");
+        Gson gson = new Gson();
+        final UsuarioDao user = gson.fromJson(datos , UsuarioDao.class);
+
+        if(!fecha.equals("") && !lt1.equals("") && !lt2.equals("") && !ln1.equals("") && !ln2.equals("") && !user.getCorreo().equals("")) {
+
+
+            OkHttpClient client = new OkHttpClient()
+                    .newBuilder()
+                    .connectTimeout(5000 , TimeUnit.MILLISECONDS)
+                    .readTimeout(5000 ,TimeUnit.MILLISECONDS)
+                    .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
+                    .build();
+            RequestBody formBody = new FormBody.Builder()
+                    .add("fecha", fecha)
+                    .add("lt1", lt1)
+                    .add("ln1",ln1)
+                    .add("lt2", lt2)
+                    .add("ln2", ln2)
+                    .add("descripcion", "")
+                    .add("usuario", user.getCorreo())
+                    .build();
+            Log.d(Constants.TAG_LOG, String.valueOf(formBody));
+            Request request = new Request.Builder()
+                    .url(Constants.URL_PUBLICACION) // The URL to send the data to
+                    .post(formBody)
+                    .addHeader("content-type", "application/json; charset=utf-8")
+                    .build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    CreateEventActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            mostrarError();
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, final Response response) throws IOException {
+
+                    if(response.isSuccessful()) {
+                        final String data = response.body().string();
+                        CreateEventActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Gson gson = new Gson();
+
+                                RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
+
+                                if(respuesta.getCodigo() == Constants.SERVICES_OK){
+                                    Intent myIntent = getIntent();
+                                    String datos = myIntent.getStringExtra("dato_correo");
+                                    Intent intent = new Intent(getApplicationContext(), News.class);
+                                    try {
+                                        intent.putExtra(Constants.PREFERENCE_USER , datos);
+                                        startActivity(intent);
+                                    }catch (Exception ex){
+                                        Log.e(Constants.TAG_LOG , ex.getMessage());
+                                        mostrarError();
+                                    }
+                                }else{
+                                    mostrarError(respuesta.getMensaje());
+                                }
+
+                            }
+                        });
+                    }else{
+                        CreateEventActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mostrarError();
+                            }
+                        });
+                    }
+                }
+            });
+
+        }else{
+            Utils.mostrarAlerta(this , getString(R.string.mensaje_error_not_inputs2));
+        }
+
     }
 
     @Override
@@ -82,7 +194,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         hourFinal = i;
         minutesFinal = i1;
 
-        textfecha.setText(dayFinal + "/" + monthFinal + "/" + yearFinal + " " + hourFinal + ":" + minutesFinal);
+        textfecha.setText(yearFinal + "-" + monthFinal + "-" + dayFinal + " " +hourFinal + ":" + minutesFinal+":00");
     }
 
     @Override
@@ -111,9 +223,22 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                 }
                 map.addMarker(markerOptions);
 
+                if(ListPoints.size() == 2){
+                   lt1.setText(""+ListPoints.get(0).latitude+"");
+                    lt2.setText(""+ListPoints.get(1).latitude+"");
+                    ln1.setText(""+ListPoints.get(0).longitude+"");
+                    ln2.setText(""+ListPoints.get(1).longitude+"");
+                }
 
             }
         });
+    }
+
+    public void mostrarError(){
+        Utils.mostrarAlerta(this , getString(R.string.MENSAJE_ERROR_GENERAL));
+    }
+    public void mostrarError(String mensaje){
+        Utils.mostrarAlerta(this , mensaje);
     }
 
 }
