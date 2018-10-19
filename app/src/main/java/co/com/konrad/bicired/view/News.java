@@ -1,6 +1,8 @@
 package co.com.konrad.bicired.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +25,7 @@ import co.com.konrad.bicired.R;
 import co.com.konrad.bicired.logic.ResponseDaoNews;
 import co.com.konrad.bicired.logic.UsuarioDao;
 import co.com.konrad.bicired.utils.Constants;
+import co.com.konrad.bicired.utils.Utils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -30,6 +36,10 @@ public class News extends AppCompatActivity {
 
     private ListView items;
     private ProgressBar spiner;
+    private TextView labelNoData;
+    private ImageView imgNoData;
+    private ResponseDaoNews news;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +50,22 @@ public class News extends AppCompatActivity {
         //Capturando datos del Login
         Intent myIntent = getIntent();
         String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
+        //Guardado de preferencia
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(Constants.PREFERENCE_USER, datos);
+        editor.commit();
+        //Inicio de proceso
         Gson gson = new Gson();
         UsuarioDao user = gson.fromJson(datos , UsuarioDao.class);
         //Creando Enlace con las vistas
         items = (ListView) findViewById(R.id.listNews);
         spiner = (ProgressBar) findViewById(R.id.cargandoSpinerNews);
+        labelNoData = (TextView) findViewById(R.id.informacionNoData);
+        imgNoData = (ImageView) findViewById(R.id.imagenNoData);
 
+        labelNoData.setVisibility(View.GONE);
+        imgNoData.setVisibility(View.GONE);
         items.setVisibility(View.GONE);
         spiner.setVisibility(View.VISIBLE);
 
@@ -70,8 +90,10 @@ public class News extends AppCompatActivity {
                 News.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        items.setVisibility(View.VISIBLE);
                         spiner.setVisibility(View.GONE);
+                        labelNoData.setVisibility(View.VISIBLE);
+                        imgNoData.setVisibility(View.VISIBLE);
+                        mostrarError();
                     }
                 });
             }
@@ -86,27 +108,44 @@ public class News extends AppCompatActivity {
                         public void run() {
                             Log.d(Constants.TAG_LOG , data);
                             Gson gson = new Gson();
-                            ResponseDaoNews news = gson.fromJson(data , ResponseDaoNews.class);
-                            MapAdapter map = new MapAdapter(getApplicationContext(), R.layout.adapter_map ,news.getNewDao());
-                            items.setAdapter(map);
-                            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                            fab.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent intent = new Intent(News.this,CreateEventActivity.class);
-                                    startActivity(intent);
-                                }
-                            });
+                             news = gson.fromJson(data , ResponseDaoNews.class);
+                            if(news.getCodigo() == Constants.SERVICES_OK) {
+                                if(news.getNewDao().size() > 0) {
+                                    MapAdapter map = new MapAdapter(getApplicationContext(), R.layout.adapter_map, news.getNewDao());
+                                    items.setAdapter(map);
+                                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                                    fab.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent(News.this, CreateEventActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
 
-                            items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    Intent intent = new Intent(News.this,MapaDetalleRuta.class);
-                                    startActivity(intent);
+                                    items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            Intent intent = new Intent(News.this, MapaDetalleRuta.class);
+                                            intent.putExtra(Constants.PARAMETRO_LATITUD_ORIGEN , news.getNewDao().get(position).getPbl_ltd_origen());
+                                            intent.putExtra(Constants.PARAMETRO_LONGITUD_ORIGEN , news.getNewDao().get(position).getPbl_ltg_origen());
+                                            intent.putExtra(Constants.PARAMETRO_LATITUD_DESTINO , news.getNewDao().get(position).getPbl_ltd_destino());
+                                            intent.putExtra(Constants.PARAMETRO_LONGITUD_DESTINO , news.getNewDao().get(position).getPbl_ltg_destino());
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    items.setVisibility(View.VISIBLE);
+                                    spiner.setVisibility(View.GONE);
+                                }else{
+                                    spiner.setVisibility(View.GONE);
+                                    labelNoData.setVisibility(View.VISIBLE);
+                                    imgNoData.setVisibility(View.VISIBLE);
                                 }
-                            });
-                            items.setVisibility(View.VISIBLE);
-                            spiner.setVisibility(View.GONE);
+                            }else{
+                                spiner.setVisibility(View.GONE);
+                                labelNoData.setVisibility(View.VISIBLE);
+                                imgNoData.setVisibility(View.VISIBLE);
+                                mostrarError();
+                            }
                         }
                     });
                 }else{
@@ -144,5 +183,9 @@ public class News extends AppCompatActivity {
 
         }
         return true;
+    }
+
+    public void mostrarError(){
+        Utils.mostrarAlerta(this , getString(R.string.MENSAJE_ERROR_GENERAL));
     }
 }

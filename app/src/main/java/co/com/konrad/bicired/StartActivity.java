@@ -33,13 +33,11 @@ public class StartActivity extends AppCompatActivity {
     private Button buttonLogin;
     private Button buttonRegistro;
     private ProgressBar spinner;
-    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        preferences = getPreferences(Context.MODE_PRIVATE);
         this.correo = ((EditText) findViewById(R.id.usuario));
         this.correo.setHintTextColor(getResources().getColor(R.color.colorAccent));
         this.clave = ((EditText) findViewById(R.id.clave));

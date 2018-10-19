@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundApp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".view.News"
-    android:background="@color/backgroundApp"
     tools:showIn="@layout/activity_news">
 
     <ProgressBar
@@ -20,11 +20,31 @@
         android:progressDrawable="@drawable/circular_progress_bar"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/imagenNoData"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/no_data" />
+
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listNews"
-        android:padding="@dimen/margin"
-        android:layout_margin="@dimen/margin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/margin">
+
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/informacionNoData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/MENSAJE_NO_DATA"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
 </android.support.constraint.ConstraintLayout>

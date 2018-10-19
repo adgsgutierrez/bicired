@@ -13,7 +13,12 @@ public class Constants {
 
     public static int SERVICES_OK = 200;
 
-
     public static String PREFERENCE_USER = "US_PREF";
+
+    public static String PARAMETRO_LATITUD_ORIGEN = "PLATOR";
+    public static String PARAMETRO_LONGITUD_ORIGEN = "PLONOR";
+
+    public static String PARAMETRO_LATITUD_DESTINO = "PLATOD";
+    public static String PARAMETRO_LONGITUD_DESTINO = "PLONOD";
 
 }
