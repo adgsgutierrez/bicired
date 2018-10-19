@@ -52,14 +52,12 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Object item = adapterView.getItemAtPosition(i);
-                Log.d(Constants.TAG_LOG,item.toString());
 
                 if(item.toString().equals("Hombre")){
                     generodefinitivo.setText("M");
                 }else if(item.toString().equals("Mujer")){
                     generodefinitivo.setText("F");
                 }
-                Log.d(Constants.TAG_LOG,""+generodefinitivo.getText()+"");
 
             }
 
@@ -76,11 +74,6 @@ public class RegisterActivity extends AppCompatActivity {
         String clave_re = clave.getText().toString();
         String clave_re_co = confirmacion_clave.getText().toString();
         String correo_re = correo.getText().toString();
-
-        Log.d(Constants.TAG_LOG,genero);
-        Log.d(Constants.TAG_LOG,nombre_re);
-        Log.d(Constants.TAG_LOG,clave_re);
-        Log.d(Constants.TAG_LOG,correo_re);
 
         if(!genero.equals("") && !nombre_re.equals("") && !clave_re.equals("") && !clave_re_co.equals("") && !correo_re.equals("")) {
              if(clave_re.equals(clave_re_co)){
@@ -99,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
                  Log.d(Constants.TAG_LOG, String.valueOf(formBody));
                  Request request = new Request.Builder()
                          .url(Constants.URL_LOGIN) // The URL to send the data to
-                         .post(formBody)
+                         .put(formBody)
                          .addHeader("content-type", "application/json; charset=utf-8")
                          .build();
                  client.newCall(request).enqueue(new Callback() {
@@ -116,22 +109,18 @@ public class RegisterActivity extends AppCompatActivity {
 
                      @Override
                      public void onResponse(Call call, final Response response) throws IOException {
-
                          if(response.isSuccessful()) {
                              final String data = response.body().string();
                              RegisterActivity.this.runOnUiThread(new Runnable() {
                                  @Override
                                  public void run() {
+
                                      Gson gson = new Gson();
-
                                      RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
-                                     Log.d(Constants.TAG_LOG,respuesta.getMensaje());
-                                     Log.d(Constants.TAG_LOG,respuesta.getCodigo().toString());
-                                     Log.d(Constants.TAG_LOG,respuesta.getDatos().toString());
                                      if(respuesta.getCodigo() == Constants.SERVICES_OK){
-
-                                         Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+                                         Intent intent = new Intent(getApplicationContext(), News.class);
                                          try {
+                                             intent.putExtra(Constants.PREFERENCE_USER,"{'codigo':"+respuesta.getCodigo()+",'mensaje':'"+respuesta.getMensaje()+"','datos':[]}");
                                              startActivity(intent);
                                          }catch (Exception ex){
                                              Log.e(Constants.TAG_LOG , ex.getMessage());
