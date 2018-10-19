@@ -144,9 +144,10 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                                 if(respuesta.getCodigo() == Constants.SERVICES_OK){
                                     Intent myIntent = getIntent();
                                     String datos = myIntent.getStringExtra("dato_correo");
+                                    Log.d(Constants.TAG_LOG,datos);
                                     Intent intent = new Intent(getApplicationContext(), News.class);
                                     try {
-                                        intent.putExtra(Constants.PREFERENCE_USER , datos);
+                                        intent.putExtra(Constants.PREFERENCE_USER, datos);
                                         startActivity(intent);
                                     }catch (Exception ex){
                                         Log.e(Constants.TAG_LOG , ex.getMessage());

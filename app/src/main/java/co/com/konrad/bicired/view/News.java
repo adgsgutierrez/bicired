@@ -58,6 +58,7 @@ public class News extends AppCompatActivity {
         //Inicio de proceso
         Gson gson = new Gson();
         UsuarioDao user = gson.fromJson(datos , UsuarioDao.class);
+        Log.d(Constants.TAG_LOG,user.getCorreo());
         //Creando Enlace con las vistas
         items = (ListView) findViewById(R.id.listNews);
         spiner = (ProgressBar) findViewById(R.id.cargandoSpinerNews);
@@ -110,17 +111,21 @@ public class News extends AppCompatActivity {
                             Gson gson = new Gson();
                              news = gson.fromJson(data , ResponseDaoNews.class);
                             if(news.getCodigo() == Constants.SERVICES_OK) {
+                                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                                fab.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent intent = new Intent(News.this, CreateEventActivity.class);
+                                        Intent myIntent = getIntent();
+                                        String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
+                                        intent.putExtra("dato_correo",datos);
+                                        startActivity(intent);
+                                    }
+                                });
                                 if(news.getNewDao().size() > 0) {
                                     MapAdapter map = new MapAdapter(getApplicationContext(), R.layout.adapter_map, news.getNewDao());
                                     items.setAdapter(map);
-                                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                                    fab.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            Intent intent = new Intent(News.this, CreateEventActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
+
 
                                     items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         @Override

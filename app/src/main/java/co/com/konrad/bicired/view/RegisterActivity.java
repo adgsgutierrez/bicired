@@ -118,14 +118,78 @@ public class RegisterActivity extends AppCompatActivity {
                                      Gson gson = new Gson();
                                      RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
                                      if(respuesta.getCodigo() == Constants.SERVICES_OK){
-                                         Intent intent = new Intent(getApplicationContext(), News.class);
-                                         try {
-                                             intent.putExtra(Constants.PREFERENCE_USER,"{'codigo':"+respuesta.getCodigo()+",'mensaje':'"+respuesta.getMensaje()+"','datos':[]}");
-                                             startActivity(intent);
-                                         }catch (Exception ex){
-                                             Log.e(Constants.TAG_LOG , ex.getMessage());
-                                             mostrarError();
-                                         }
+                                         Log.d(Constants.TAG_LOG,correo.getText().toString());
+                                         Log.d(Constants.TAG_LOG,clave.getText().toString());
+                                         OkHttpClient client = new OkHttpClient()
+                                                 .newBuilder()
+                                                 .connectTimeout(5000 , TimeUnit.MILLISECONDS)
+                                                 .readTimeout(5000 ,TimeUnit.MILLISECONDS)
+                                                 .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
+                                                 .build();
+                                         RequestBody formBody = new FormBody.Builder()
+                                                 .add("correo", correo.getText().toString())
+                                                 .add("clave", clave.getText().toString())
+                                                 .add("origen", Constants.PLATAFORMA)
+                                                 .add("usuario", "")
+                                                 .add("foto", "")
+                                                 .build();
+                                         Request request = new Request.Builder()
+                                                 .url(Constants.URL_LOGIN) // The URL to send the data to
+                                                 .post(formBody)
+                                                 .addHeader("content-type", "application/json; charset=utf-8")
+                                                 .build();
+                                         client.newCall(request).enqueue(new Callback() {
+                                             @Override
+                                             public void onFailure(Call call, IOException e) {
+                                                 RegisterActivity.this.runOnUiThread(new Runnable() {
+                                                     @Override
+                                                     public void run() {
+
+                                                         mostrarError();
+                                                     }
+                                                 });
+                                             }
+
+                                             @Override
+                                             public void onResponse(Call call, final Response response) throws IOException {
+
+                                                 if(response.isSuccessful()) {
+                                                     final String datas = response.body().string();
+                                                     RegisterActivity.this.runOnUiThread(new Runnable() {
+                                                         @Override
+                                                         public void run() {
+
+                                                             Gson gson = new Gson();
+                                                             RespuestaDaoLogin respuesta2 = gson.fromJson(datas , RespuestaDaoLogin.class);
+                                                             if(respuesta2.getCodigo() == Constants.SERVICES_OK){
+                                                                 Log.d(Constants.TAG_LOG,respuesta2.getDatos().toString());
+                                                                 Intent intent = new Intent(getApplicationContext(), News.class);
+                                                                 try {
+                                                                     intent.putExtra(Constants.PREFERENCE_USER,respuesta2.getDatos().toString());
+                                                                     startActivity(intent);
+                                                                 }catch (Exception ex){
+                                                                     Log.e(Constants.TAG_LOG , ex.getMessage());
+                                                                     mostrarError();
+                                                                 }
+
+                                                             }else{
+                                                                 mostrarError(respuesta2.getMensaje());
+                                                             }
+
+                                                         }
+                                                     });
+                                                 }else{
+                                                     RegisterActivity.this.runOnUiThread(new Runnable() {
+                                                         @Override
+                                                         public void run() {
+
+                                                             mostrarError();
+                                                         }
+                                                     });
+                                                 }
+                                             }
+                                         });
+
                                      }else{
                                          mostrarError(respuesta.getMensaje());
                                      }
