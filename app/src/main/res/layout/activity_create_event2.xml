@@ -94,7 +94,16 @@
                 android:layout_marginRight="0dp"
                 android:layout_weight="1"
                 android:padding="10dp">
-
+                <ProgressBar
+                    android:id="@+id/cargandoSpiner"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:progressDrawable="@drawable/circular_progress_bar"
+                    android:visibility="gone" />
                 <Button
                     android:id="@+id/button6"
                     android:layout_width="60dp"

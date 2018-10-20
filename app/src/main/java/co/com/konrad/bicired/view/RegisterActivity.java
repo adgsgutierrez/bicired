@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.google.gson.Gson;
@@ -32,11 +34,15 @@ public class RegisterActivity extends AppCompatActivity {
 
      Spinner Genero;
      EditText generodefinitivo,nombre,correo,clave,confirmacion_clave;
+    private ProgressBar spinner;
+    private Button boton,boton2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        boton = (Button) findViewById(R.id.button);
+        boton2 = (Button) findViewById(R.id.button2);
+        spinner = (ProgressBar) findViewById(R.id.cargandoSpiner);
         Genero = (Spinner)findViewById(R.id.spinner);
 
         generodefinitivo = (EditText)findViewById(R.id.genero);
@@ -77,6 +83,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(!genero.equals("") && !nombre_re.equals("") && !clave_re.equals("") && !clave_re_co.equals("") && !correo_re.equals("")) {
              if(clave_re.equals(clave_re_co)){
+                 boton.setVisibility(View.GONE);
+                 boton2.setVisibility(View.GONE);
+                 spinner.setVisibility(View.VISIBLE);
                  OkHttpClient client = new OkHttpClient()
                          .newBuilder()
                          .connectTimeout(5000 , TimeUnit.MILLISECONDS)
@@ -101,7 +110,9 @@ public class RegisterActivity extends AppCompatActivity {
                          RegisterActivity.this.runOnUiThread(new Runnable() {
                              @Override
                              public void run() {
-
+                                 boton.setVisibility(View.VISIBLE);
+                                 boton2.setVisibility(View.VISIBLE);
+                                 spinner.setVisibility(View.GONE);
                                  mostrarError();
                              }
                          });
@@ -114,7 +125,9 @@ public class RegisterActivity extends AppCompatActivity {
                              RegisterActivity.this.runOnUiThread(new Runnable() {
                                  @Override
                                  public void run() {
-
+                                     boton.setVisibility(View.VISIBLE);
+                                     boton2.setVisibility(View.VISIBLE);
+                                     spinner.setVisibility(View.GONE);
                                      Gson gson = new Gson();
                                      RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
                                      if(respuesta.getCodigo() == Constants.SERVICES_OK){
@@ -182,7 +195,9 @@ public class RegisterActivity extends AppCompatActivity {
                                                      RegisterActivity.this.runOnUiThread(new Runnable() {
                                                          @Override
                                                          public void run() {
-
+                                                             boton.setVisibility(View.VISIBLE);
+                                                             boton2.setVisibility(View.VISIBLE);
+                                                             spinner.setVisibility(View.GONE);
                                                              mostrarError();
                                                          }
                                                      });
@@ -191,6 +206,9 @@ public class RegisterActivity extends AppCompatActivity {
                                          });
 
                                      }else{
+                                         boton.setVisibility(View.VISIBLE);
+                                         boton2.setVisibility(View.VISIBLE);
+                                         spinner.setVisibility(View.GONE);
                                          mostrarError(respuesta.getMensaje());
                                      }
 
@@ -200,6 +218,9 @@ public class RegisterActivity extends AppCompatActivity {
                              RegisterActivity.this.runOnUiThread(new Runnable() {
                                  @Override
                                  public void run() {
+                                     boton.setVisibility(View.VISIBLE);
+                                     boton2.setVisibility(View.VISIBLE);
+                                     spinner.setVisibility(View.GONE);
                                      mostrarError();
                                  }
                              });
@@ -207,11 +228,11 @@ public class RegisterActivity extends AppCompatActivity {
                      }
                  });
              }else{
-
+                 Utils.mostrarAlerta(this , getString(R.string.mensaje_error_not_inputs4));
              }
         }
         else{
-
+            Utils.mostrarAlerta(this , getString(R.string.mensaje_error_not_inputs3));
         }
 
 

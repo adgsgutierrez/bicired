@@ -35,6 +35,8 @@
 
     <string name="mensaje_error_not_inputs">Debes digitar tu usuario y/o clave</string>
     <string name="mensaje_error_not_inputs2">Debe seleccionar la fecha, la hora y la ruta</string>
+    <string name="mensaje_error_not_inputs3">Hay un campo vacío</string>
+    <string name="mensaje_error_not_inputs4">La clave y la confirmación de clave no son iguales</string>
     <string name="ok">Ok</string>
 
     <string name="MENSAJE_ERROR_TIME">Revisa tu conexión a internet</string>

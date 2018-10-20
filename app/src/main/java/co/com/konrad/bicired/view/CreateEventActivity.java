@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -48,6 +49,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     EditText lt1,lt2,ln1,ln2;
     int day, month, year, hour, minutes;
     int dayFinal, monthFinal, yearFinal, hourFinal, minutesFinal;
+    private  Button btn_guardar;
+    private ProgressBar spinner;
     ArrayList<LatLng> ListPoints;
 
     @Override
@@ -58,9 +61,10 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         ListPoints = new ArrayList<>();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
         mapFragment.getMapAsync(this);
-
+        btn_guardar = (Button) findViewById(R.id.button6);
         btn_fecha = (Button) findViewById(R.id.btnfecha);
         textfecha = (TextView) findViewById(R.id.textfecha);
+        spinner = (ProgressBar) findViewById(R.id.cargandoSpiner);
         lt1 = (EditText) findViewById(R.id.lt1);
         lt2 = (EditText) findViewById(R.id.lt2);
         ln1 = (EditText) findViewById(R.id.ln1);
@@ -94,7 +98,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         final UsuarioDao user = gson.fromJson(datos , UsuarioDao.class);
 
         if(!fecha.equals("") && !lt1.equals("") && !lt2.equals("") && !ln1.equals("") && !ln2.equals("") && !user.getCorreo().equals("")) {
-
+         btn_guardar.setVisibility(View.GONE);
+         spinner.setVisibility(View.VISIBLE);
 
             OkHttpClient client = new OkHttpClient()
                     .newBuilder()
@@ -123,7 +128,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                     CreateEventActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
+                            btn_guardar.setVisibility(View.VISIBLE);
+                            spinner.setVisibility(View.GONE);
                             mostrarError();
                         }
                     });
@@ -142,6 +148,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                                 RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
 
                                 if(respuesta.getCodigo() == Constants.SERVICES_OK){
+                                    btn_guardar.setVisibility(View.VISIBLE);
+                                    spinner.setVisibility(View.GONE);
                                     Intent myIntent = getIntent();
                                     String datos = myIntent.getStringExtra("dato_correo");
                                     Log.d(Constants.TAG_LOG,datos);
@@ -154,13 +162,16 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                                         mostrarError();
                                     }
                                 }else{
+                                    btn_guardar.setVisibility(View.VISIBLE);
+                                    spinner.setVisibility(View.GONE);
                                     mostrarError(respuesta.getMensaje());
                                 }
 
                             }
                         });
                     }else{
-
+                        btn_guardar.setVisibility(View.VISIBLE);
+                        spinner.setVisibility(View.GONE);
                     }
                 }
             });
