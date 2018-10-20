@@ -160,12 +160,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                             }
                         });
                     }else{
-                        CreateEventActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mostrarError();
-                            }
-                        });
+
                     }
                 }
             });

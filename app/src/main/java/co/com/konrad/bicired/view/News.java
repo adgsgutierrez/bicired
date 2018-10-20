@@ -182,7 +182,10 @@ public class News extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.profile_bar:
                 Log.d(Constants.TAG_LOG, "Ingresando al profile");
+                Intent myIntent = getIntent();
+                String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
                 Intent intent = new Intent(this, profileActivity.class);
+                intent.putExtra(Constants.PREFERENCE_USER,datos);
                 startActivity(intent);
                 break;
 

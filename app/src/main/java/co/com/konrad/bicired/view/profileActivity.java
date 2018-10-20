@@ -2,20 +2,28 @@ package co.com.konrad.bicired.view;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import co.com.konrad.bicired.R;
 import co.com.konrad.bicired.StartActivity;
+import co.com.konrad.bicired.logic.RespuestaDaoLogin;
+import co.com.konrad.bicired.logic.UsuarioDao;
 import co.com.konrad.bicired.utils.Constants;
+import co.com.konrad.bicired.utils.Utils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -25,14 +33,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class profileActivity extends AppCompatActivity {
-
-    Button volverInicio;
-    Button guardarPerfil;
-    private EditText nameComplete;
-    private EditText email;
-    private EditText cellphone;
-    private Button Buttonsave;
-    private Button Buttoncancel;
+private EditText nombre_pe,correo_pe,genero_pe;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -41,54 +42,24 @@ public class profileActivity extends AppCompatActivity {
         super.onCreate(BackStart);
         setContentView(R.layout.activity_profile);
 
-
-        volverInicio = findViewById(R.id.btn_perfil_volver);
-        guardarPerfil = findViewById(R.id.btn_perfil_guardar);
-
-        volverInicio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent volverInicio = new Intent(profileActivity.this, News.class);
-                startActivity(volverInicio);
-            }
-        });
-        guardarPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent volverInicio = new Intent(profileActivity.this, News.class);
-                startActivity(volverInicio);
-            }
-        });
-
-    }
-
-    public void onProfile(View v) {
-        String usuario = this.nameComplete.getText().toString();
-        String email = this.email.getText().toString();
-        String cellphone = this.cellphone.getText().toString();
-
-
-        if (!usuario.equals("") && !usuario.equals("")) {
-
-            this.Buttonsave.setVisibility(View.VISIBLE);
-            this.Buttoncancel.setVisibility(View.VISIBLE);
-
-
+        nombre_pe = (EditText) findViewById(R.id.nombre_profile);
+        correo_pe = (EditText) findViewById(R.id.correo_profile);
+        genero_pe = (EditText) findViewById(R.id.genero_pe);
+        Intent myIntent = getIntent();
+        String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
+        Gson gson = new Gson();
+        UsuarioDao user = gson.fromJson(datos , UsuarioDao.class);
+        Log.d(Constants.TAG_LOG,user.getCorreo());
             OkHttpClient client = new OkHttpClient()
                     .newBuilder()
                     .connectTimeout(5000, TimeUnit.MILLISECONDS)
                     .readTimeout(5000, TimeUnit.MILLISECONDS)
                     .writeTimeout(5000, TimeUnit.MILLISECONDS)
                     .build();
-            RequestBody formBody = new FormBody.Builder()
-                    .add("namecomplete", usuario)
-                    .add("email", email)
-                    .add("cellphone", cellphone)
-
-                    .build();
+            String parametros = "?funcion=datos_perfil&correo="+user.getCorreo();
             Request request = new Request.Builder()
-                    .url(Constants.URL_LOGIN) // The URL to send the data to
-                    .post(formBody)
+                    .url(Constants.URL_LOGIN+parametros) // The URL to send the data to
+                    .get()
                     .addHeader("content-type", "application/json; charset=utf-8")
                     .build();
             client.newCall(request).enqueue(new Callback() {
@@ -97,7 +68,7 @@ public class profileActivity extends AppCompatActivity {
                     profileActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            nameComplete.setVisibility(View.VISIBLE);
+                            mostrarError();
                         }
 
                     });
@@ -105,12 +76,47 @@ public class profileActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
+                    if(response.isSuccessful()) {
+                        final String data = response.body().string();
+                        profileActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Gson gson = new Gson();
 
+                                RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
+
+                                if(respuesta.getCodigo() == Constants.SERVICES_OK){
+                                    Gson gson2 = new Gson();
+                                    UsuarioDao user = gson2.fromJson(respuesta.getDatos().toString() , UsuarioDao.class);
+                                    nombre_pe.setText(user.getNombre());
+                                    if(user.getGenero().equals("M")){
+                                        genero_pe.setText("Hombre");
+                                    }else if(user.getGenero().equals("F")){
+                                        genero_pe.setText("Mujer");
+                                    }
+                                    correo_pe.setText(user.getCorreo());
+                                }else{
+                                    mostrarError(respuesta.getMensaje());
+                                }
+
+                            }
+                        });
+                    }else{
+
+                    }
                 }
             });
 
-        }
+
+
     }
+    public void mostrarError(){
+        Utils.mostrarAlerta(this , getString(R.string.MENSAJE_ERROR_GENERAL));
+    }
+    public void mostrarError(String mensaje){
+        Utils.mostrarAlerta(this , mensaje);
+    }
+
 }
 
 
