@@ -10,4 +10,6 @@
     <color name="whitePrimaryColor">#ffffff</color>
     <color name="backgroundSplash">#5294bd</color>
     <color name="backgroundApp">#f7f7f7</color>
+    <color name="dialog_divider">#B2EBF2</color>
 </resources>
+

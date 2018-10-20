@@ -6,10 +6,10 @@
         android:icon="@drawable/ic_account_circle"
         myapp:showAsAction="ifRoom"
         android:title="@string/profile"/>
-
+<!--
     <item android:id="@+id/configure_bar"
         android:icon="@drawable/ic_settings"
         myapp:showAsAction="ifRoom"
         android:title="@string/configure"/>
-
+-->
 </menu>

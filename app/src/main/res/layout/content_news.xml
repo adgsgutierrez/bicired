@@ -45,6 +45,6 @@
         android:text="@string/MENSAJE_NO_DATA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        app:layout_constraintTop_toBottomOf="@+id/cargandoSpinerNews" />
 
 </android.support.constraint.ConstraintLayout>
