@@ -54,6 +54,10 @@ public class MapaDetalleRuta extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent myIntent = getIntent();
+
+        final String correo = myIntent.getStringExtra(Constants.PREFERENCE_USER);
+        final String evento = myIntent.getStringExtra(Constants.PARAMETRO_EVENTO);
+
         String ltd_o = myIntent.getStringExtra(Constants.PARAMETRO_LATITUD_ORIGEN);
         String lng_o = myIntent.getStringExtra(Constants.PARAMETRO_LONGITUD_ORIGEN);
         String ltd_r = myIntent.getStringExtra(Constants.PARAMETRO_LATITUD_DESTINO);
@@ -115,6 +119,8 @@ public class MapaDetalleRuta extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), FotografiasLista.class);
+                intent.putExtra(Constants.PARAMETRO_EVENTO , evento);
+                intent.putExtra(Constants.PREFERENCE_USER, correo);
                 startActivity(intent);
             }
         });

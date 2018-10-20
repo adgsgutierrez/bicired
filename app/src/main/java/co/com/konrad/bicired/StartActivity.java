@@ -106,7 +106,13 @@ public class StartActivity extends AppCompatActivity {
                                 if(respuesta.getCodigo() == Constants.SERVICES_OK){
                                     Intent intent = new Intent(getApplicationContext(), News.class);
                                     try {
-                                        intent.putExtra(Constants.PREFERENCE_USER , respuesta.getDatos().toString());
+                                        SharedPreferences sharedPref = getSharedPreferences(Constants.PREFERENCE_USER, Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                        editor.putString(Constants.PREFERENCE_USER_DATA, respuesta.getDatos().toString());
+                                        editor.putBoolean(Constants.PREFERENCE_USER_IS_LOGIN, true);
+                                        editor.commit();
+
+                                        intent.putExtra(Constants.PREFERENCE_USER_DATA, respuesta.getDatos().toString());
                                         startActivity(intent);
                                     }catch (Exception ex){
                                         Log.e(Constants.TAG_LOG , ex.getMessage());

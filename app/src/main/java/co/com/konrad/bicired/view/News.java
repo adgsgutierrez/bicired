@@ -49,16 +49,14 @@ public class News extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //Capturando datos del Login
         Intent myIntent = getIntent();
-        String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
+        String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER_DATA);
         //Guardado de preferencia
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(Constants.PREFERENCE_USER, datos);
-        editor.commit();
+
         //Inicio de proceso
         Gson gson = new Gson();
         UsuarioDao user = gson.fromJson(datos , UsuarioDao.class);
         Log.d(Constants.TAG_LOG,user.getCorreo());
+        final UsuarioDao Us = user;
         //Creando Enlace con las vistas
         items = (ListView) findViewById(R.id.listNews);
         spiner = (ProgressBar) findViewById(R.id.cargandoSpinerNews);
@@ -131,6 +129,8 @@ public class News extends AppCompatActivity {
                                         @Override
                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                             Intent intent = new Intent(News.this, MapaDetalleRuta.class);
+                                            intent.putExtra(Constants.PREFERENCE_USER , Us.getCorreo());
+                                            intent.putExtra(Constants.PARAMETRO_EVENTO , news.getNewDao().get(position).getPk_pbl_id());
                                             intent.putExtra(Constants.PARAMETRO_LATITUD_ORIGEN , news.getNewDao().get(position).getPbl_ltd_origen());
                                             intent.putExtra(Constants.PARAMETRO_LONGITUD_ORIGEN , news.getNewDao().get(position).getPbl_ltg_origen());
                                             intent.putExtra(Constants.PARAMETRO_LATITUD_DESTINO , news.getNewDao().get(position).getPbl_ltd_destino());

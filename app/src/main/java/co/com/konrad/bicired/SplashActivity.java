@@ -30,15 +30,16 @@ public class SplashActivity extends Activity {
    }
 
    private void endSplash(){
-       SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-       String datos = sharedPref.getString(Constants.PREFERENCE_USER , "");
-        if(datos.equals("")) {
+       SharedPreferences sharedPref = getSharedPreferences(Constants.PREFERENCE_USER, Context.MODE_PRIVATE);
+       boolean isLogin = sharedPref.getBoolean(Constants.PREFERENCE_USER_IS_LOGIN, false);
+        if(!isLogin) {
             startActivity(new Intent(this, StartActivity.class));
             overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
             finish();
         }else{
+            String datos = sharedPref.getString(Constants.PREFERENCE_USER_DATA , "");
             Intent intent = new Intent(getApplicationContext(), News.class);
-            intent.putExtra(Constants.PREFERENCE_USER , datos);
+            intent.putExtra(Constants.PREFERENCE_USER_DATA , datos);
             startActivity(intent);
             overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
             finish();
