@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import co.com.konrad.bicired.R;
+import co.com.konrad.bicired.StartActivity;
 import co.com.konrad.bicired.logic.ResponseDaoNews;
 import co.com.konrad.bicired.logic.UsuarioDao;
 import co.com.konrad.bicired.utils.Constants;
@@ -187,6 +188,13 @@ public class News extends AppCompatActivity {
                 Intent intent = new Intent(this, profileActivity.class);
                 intent.putExtra(Constants.PREFERENCE_USER,datos);
                 startActivity(intent);
+                break;
+            case R.id.exit:
+                SharedPreferences sharedPref = getSharedPreferences(Constants.PREFERENCE_USER, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.clear();
+                Intent intentBack = new Intent(this, StartActivity.class);
+                startActivity(intentBack);
                 break;
 
         }
