@@ -14,15 +14,33 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="55dp"
         tools:layout_editor_absoluteY="0dp">
+        <LinearLayout
+            android:id="@+id/caja_principal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="71dp"
             app:srcCompat="@drawable/login" />
-
+            <ProgressBar
+                android:id="@+id/cargandoSpiner"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:visibility="gone"
+                android:progressDrawable="@drawable/circular_progress_bar"
+                />
 
         <TextView
+            android:id="@+id/textnombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -46,6 +64,7 @@
             android:textColor="@color/primaryText" />
 
         <TextView
+            android:id="@+id/textcorreo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -70,13 +89,14 @@
             android:textColor="@color/primaryText" />
 
         <TextView
+            android:id="@+id/textgenero"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="@drawable/textview_rounded"
             android:ems="8"
             android:padding="8dp"
-            android:text="@string/telefono"
+            android:text="Genero"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -90,9 +110,60 @@
             android:enabled="false"
             android:inputType="textPersonName"
             android:padding="8dp"
+            android:visibility="gone"
             android:textColor="@color/primaryText" />
 
+        <Spinner
+            android:id="@+id/spinner_per"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            ></Spinner>
 
+        <Button
+            android:id="@+id/editar_perfil"
+            android:layout_marginTop="40dp"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button_primary"
+            android:textColor="@color/whitePrimaryColor"
+            android:text="Editar Perfil"
+            android:onClick="Editar_pe"
+            ></Button>
+
+        <LinearLayout
+            android:id="@+id/caja_botones"
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
+
+            <Button
+                android:id="@+id/cancelar_pe"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_secondary"
+                android:textColor="@color/whitePrimaryColor"
+                android:text="Cancelar"
+                android:onClick="Cancel_pe"
+                android:layout_margin="10dp"
+                ></Button>
+            <Button
+                android:id="@+id/guardar_pe"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/whitePrimaryColor"
+                android:text="Guardar"
+                android:onClick="Guardar_pe"
+                android:layout_margin="10dp"
+                ></Button>
+        </LinearLayout>
+    </LinearLayout>
 
     </LinearLayout>
+
+
 </android.support.constraint.ConstraintLayout>
