@@ -116,7 +116,7 @@ public class News extends AppCompatActivity {
                                     public void onClick(View view) {
                                         Intent intent = new Intent(News.this, CreateEventActivity.class);
                                         Intent myIntent = getIntent();
-                                        String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
+                                        String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER_DATA);
                                         intent.putExtra("dato_correo",datos);
                                         startActivity(intent);
                                     }
@@ -184,9 +184,9 @@ public class News extends AppCompatActivity {
             case R.id.profile_bar:
                 Log.d(Constants.TAG_LOG, "Ingresando al profile");
                 Intent myIntent = getIntent();
-                String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER);
+                String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER_DATA);
                 Intent intent = new Intent(this, profileActivity.class);
-                intent.putExtra(Constants.PREFERENCE_USER,datos);
+                intent.putExtra(Constants.PREFERENCE_USER_DATA,datos);
                 startActivity(intent);
                 break;
             case R.id.exit:

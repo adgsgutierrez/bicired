@@ -131,8 +131,6 @@ public class RegisterActivity extends AppCompatActivity {
                                      Gson gson = new Gson();
                                      RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
                                      if(respuesta.getCodigo() == Constants.SERVICES_OK){
-                                         Log.d(Constants.TAG_LOG,correo.getText().toString());
-                                         Log.d(Constants.TAG_LOG,clave.getText().toString());
                                          OkHttpClient client = new OkHttpClient()
                                                  .newBuilder()
                                                  .connectTimeout(5000 , TimeUnit.MILLISECONDS)
@@ -178,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                  Log.d(Constants.TAG_LOG,respuesta2.getDatos().toString());
                                                                  Intent intent = new Intent(getApplicationContext(), News.class);
                                                                  try {
-                                                                     intent.putExtra(Constants.PREFERENCE_USER,respuesta2.getDatos().toString());
+                                                                     intent.putExtra(Constants.PREFERENCE_USER_DATA ,respuesta2.getDatos().toString());
                                                                      startActivity(intent);
                                                                  }catch (Exception ex){
                                                                      Log.e(Constants.TAG_LOG , ex.getMessage());

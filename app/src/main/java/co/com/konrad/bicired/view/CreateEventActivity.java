@@ -52,6 +52,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private  Button btn_guardar;
     private ProgressBar spinner;
     ArrayList<LatLng> ListPoints;
+    private int distancia;
+    private String nombre_mes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +115,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                     .add("ln1",ln1)
                     .add("lt2", lt2)
                     .add("ln2", ln2)
-                    .add("descripcion", "")
+                    .add("descripcion", "hara un recorrido de "+distancia+" mts")
                     .add("usuario", user.getCorreo())
                     .build();
             Log.d(Constants.TAG_LOG, String.valueOf(formBody));
@@ -153,9 +155,10 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                                     Intent myIntent = getIntent();
                                     String datos = myIntent.getStringExtra("dato_correo");
                                     Log.d(Constants.TAG_LOG,datos);
+                                    Log.d(Constants.TAG_LOG,""+distancia+"");
                                     Intent intent = new Intent(getApplicationContext(), News.class);
                                     try {
-                                        intent.putExtra(Constants.PREFERENCE_USER, datos);
+                                        intent.putExtra(Constants.PREFERENCE_USER_DATA, datos);
                                         startActivity(intent);
                                     }catch (Exception ex){
                                         Log.e(Constants.TAG_LOG , ex.getMessage());
@@ -231,10 +234,15 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                 map.addMarker(markerOptions);
 
                 if(ListPoints.size() == 2){
+
                    lt1.setText(""+ListPoints.get(0).latitude+"");
                     lt2.setText(""+ListPoints.get(1).latitude+"");
                     ln1.setText(""+ListPoints.get(0).longitude+"");
                     ln2.setText(""+ListPoints.get(1).longitude+"");
+                    distancia = (int) Math.round(getdistance(ListPoints.get(0).latitude,ListPoints.get(0).longitude,ListPoints.get(1).latitude,ListPoints.get(1).longitude));
+
+                    Log.d(Constants.TAG_LOG,""+Math.round(getdistance(ListPoints.get(0).latitude,ListPoints.get(0).longitude,ListPoints.get(1).latitude,ListPoints.get(1).longitude))+"");
+Log.d(Constants.TAG_LOG,""+distancia+"");
                 }
 
             }
@@ -246,6 +254,20 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     }
     public void mostrarError(String mensaje){
         Utils.mostrarAlerta(this , mensaje);
+    }
+
+    public double getdistance(double lat1,double ln1,double lat2,double ln2){
+        int R =  6378137;
+        double dlat = rand(lat2-lat1);
+        double dln = rand(ln2-ln1);
+        double a = Math.sin(dlat / 2) * Math.sin(dlat / 2) + Math.cos(rand(lat1)) * Math.cos(rand(lat2)) * Math.sin(dln / 2) * Math.sin(dln / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double d = R * c;
+        return d;
+    }
+
+    public double rand(double x){
+        return x * Math.PI / 180;
     }
 
 }
