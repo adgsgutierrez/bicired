@@ -44,4 +44,5 @@
     <string name="MENSAJE_ERROR_GENERAL">Estamos teniendo inconvenientes técnicos, reintenta más tarde</string>
     <string name="MENSAJE_NO_DATA">No encontramos información</string>
     <string name="MENSAJE_ERROR_PAINT_ROUTE">No hemos podido encontrar la ruta, intenta más tarde</string>
+    <string name="MENSAJE_ERROR_EMAIL">Email no válido</string>
 </resources>
