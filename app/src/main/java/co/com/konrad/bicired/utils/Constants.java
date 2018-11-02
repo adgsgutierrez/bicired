@@ -26,4 +26,6 @@ public class Constants {
     public static String PARAMETRO_LATITUD_DESTINO = "PLATOD";
     public static String PARAMETRO_LONGITUD_DESTINO = "PLONOD";
 
+
+
 }

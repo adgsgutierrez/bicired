@@ -74,7 +74,6 @@ private TextView textnombre,textcorreo,textgenero;
    btn_editar.setVisibility(View.GONE);
    spinner.setEnabled(true);
    nombre_pe.setEnabled(true);
-   correo_pe.setEnabled(true);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -101,76 +100,83 @@ private TextView textnombre,textcorreo,textgenero;
         nombre_pe.setEnabled(false);
         correo_pe.setEnabled(false);
     }
-    public void Guardar_pe(View v){
-
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .connectTimeout(5000 , TimeUnit.MILLISECONDS)
-                .readTimeout(5000 ,TimeUnit.MILLISECONDS)
-                .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
-                .build();
-        RequestBody formBody = new FormBody.Builder()
-                .add("correo", correo_pe.getText().toString())
-                .add("nombre", nombre_pe.getText().toString())
-                .add("genero",genero_pe.getText().toString())
-                .add("edad", "19")
-                .add("funcion", "acperfil")
-                .build();
-        Request request = new Request.Builder()
-                .url(Constants.URL_LOGIN) // The URL to send the data to
-                .put(formBody)
-                .addHeader("content-type", "application/json; charset=utf-8")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d(Constants.TAG_LOG,"buenas");
-                profileActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mostrarError();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-
-                if(response.isSuccessful()) {
-                    final String data = response.body().string();
-                    Log.d(Constants.TAG_LOG,data);
+    public void Guardar_pe(View v) {
+        String correo = correo_pe.getText().toString();
+        String nombre = nombre_pe.getText().toString();
+        String genero = genero_pe.getText().toString();
+        if (!nombre.equals("") && !correo.equals("")) {
+            OkHttpClient client = new OkHttpClient()
+                    .newBuilder()
+                    .connectTimeout(5000, TimeUnit.MILLISECONDS)
+                    .readTimeout(5000, TimeUnit.MILLISECONDS)
+                    .writeTimeout(5000, TimeUnit.MILLISECONDS)
+                    .build();
+            RequestBody formBody = new FormBody.Builder()
+                    .add("correo", correo)
+                    .add("nombre", nombre)
+                    .add("genero", genero)
+                    .add("edad", "19")
+                    .add("funcion", "acperfil")
+                    .build();
+            Request request = new Request.Builder()
+                    .url(Constants.URL_LOGIN) // The URL to send the data to
+                    .put(formBody)
+                    .addHeader("content-type", "application/json; charset=utf-8")
+                    .build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.d(Constants.TAG_LOG, "buenas");
                     profileActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Gson gson = new Gson();
-                            RespuestaDaoLogin respuesta1 = gson.fromJson(data , RespuestaDaoLogin.class);
-                            if(respuesta1.getCodigo() == Constants.SERVICES_OK){
-                                serviciomostrar(1);
-
-
-                            }else{
-                                mostrarError(respuesta1.getMensaje());
-                            }
-
-                        }
-                    });
-                }else{
-
-                    profileActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
                             mostrarError();
                         }
                     });
                 }
-            }
-        });
-        linearLayout.setVisibility(View.GONE);
-        btn_editar.setVisibility(View.VISIBLE);
-        spinner.setEnabled(false);
-        nombre_pe.setEnabled(false);
-        correo_pe.setEnabled(false);
+
+                @Override
+                public void onResponse(Call call, final Response response) throws IOException {
+
+                    if (response.isSuccessful()) {
+                        final String data = response.body().string();
+                        Log.d(Constants.TAG_LOG, data);
+                        profileActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Gson gson = new Gson();
+                                RespuestaDaoLogin respuesta1 = gson.fromJson(data, RespuestaDaoLogin.class);
+                                if (respuesta1.getCodigo() == Constants.SERVICES_OK) {
+                                    serviciomostrar(1);
+
+
+                                } else {
+                                    mostrarError(respuesta1.getMensaje());
+                                }
+
+                            }
+                        });
+                    } else {
+
+                        profileActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                mostrarError();
+                            }
+                        });
+                    }
+                }
+            });
+            linearLayout.setVisibility(View.GONE);
+            btn_editar.setVisibility(View.VISIBLE);
+            spinner.setEnabled(false);
+            nombre_pe.setEnabled(false);
+            correo_pe.setEnabled(false);
+        }
+        else{
+            Utils.mostrarAlerta(this , getString(R.string.mensaje_error_not_inputs3));
+        }
     }
 
 

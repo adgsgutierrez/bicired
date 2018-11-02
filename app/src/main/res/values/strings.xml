@@ -44,7 +44,9 @@
     <string name="MENSAJE_ERROR_GENERAL">Estamos teniendo inconvenientes técnicos, reintenta más tarde</string>
     <string name="MENSAJE_NO_DATA">No encontramos información</string>
     <string name="MENSAJE_ERROR_PAINT_ROUTE">No hemos podido encontrar la ruta, intenta más tarde</string>
-    <string name="ERROR_CREATE_FILE">Estamos teniendo inconvenientes al crear la fotografía</string>
-    <string name="ERROR_UPDATE_FILE">Estamos teniendo enviar la fotografía</string>
-    <string name="ERROR_SAVE_FILE">Tuvimos inconvenientes al guardar la fotografía en el teléfono</string>
+    <string name="MENSAJE_ERROR_EMAIL">Email no válido</string>
+
+    <string name="ERROR_SAVE_FILE"></string>
+    <string name="ERROR_UPDATE_FILE"></string>
+
 </resources>

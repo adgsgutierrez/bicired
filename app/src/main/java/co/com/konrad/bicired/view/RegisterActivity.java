@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +17,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import co.com.konrad.bicired.R;
 import co.com.konrad.bicired.StartActivity;
@@ -82,7 +84,13 @@ public class RegisterActivity extends AppCompatActivity {
         String correo_re = correo.getText().toString();
 
         if(!genero.equals("") && !nombre_re.equals("") && !clave_re.equals("") && !clave_re_co.equals("") && !correo_re.equals("")) {
-             if(clave_re.equals(clave_re_co)){
+             if(!clave_re.equals(clave_re_co)){
+                 Utils.mostrarAlerta(this , getString(R.string.mensaje_error_not_inputs4));
+             }
+             if(!validarEmail(correo_re)){
+                 Utils.mostrarAlerta(this , getString(R.string.MENSAJE_ERROR_EMAIL));
+             }else{
+
                  boton.setVisibility(View.GONE);
                  boton2.setVisibility(View.GONE);
                  spinner.setVisibility(View.VISIBLE);
@@ -225,8 +233,6 @@ public class RegisterActivity extends AppCompatActivity {
                          }
                      }
                  });
-             }else{
-                 Utils.mostrarAlerta(this , getString(R.string.mensaje_error_not_inputs4));
              }
         }
         else{
@@ -246,5 +252,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
     public void mostrarError(String mensaje){
         Utils.mostrarAlerta(this , mensaje);
+    }
+
+    private boolean validarEmail(String email) {
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+        return pattern.matcher(email).matches();
     }
 }
