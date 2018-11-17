@@ -94,16 +94,12 @@ private TextView textnombre,textcorreo,textgenero;
         });
     }
     public void Cancel_pe(View v){
-        linearLayout.setVisibility(View.GONE);
-        btn_editar.setVisibility(View.VISIBLE);
-        spinner.setEnabled(false);
-        nombre_pe.setEnabled(false);
-        correo_pe.setEnabled(false);
+        serviciomostrar(2);
     }
     public void Guardar_pe(View v) {
-        String correo = correo_pe.getText().toString();
-        String nombre = nombre_pe.getText().toString();
-        String genero = genero_pe.getText().toString();
+        String correo = correo_pe.getText().toString().trim();
+        String nombre = nombre_pe.getText().toString().trim();
+        String genero = genero_pe.getText().toString().trim();
         if (!nombre.equals("") && !correo.equals("")) {
             OkHttpClient client = new OkHttpClient()
                     .newBuilder()
@@ -188,7 +184,7 @@ private TextView textnombre,textcorreo,textgenero;
     }
 
     public void serviciomostrar(int value){
-        if(value!=1) {
+        if(value==0) {
             load.setVisibility(View.VISIBLE);
             textnombre.setVisibility(View.GONE);
             textgenero.setVisibility(View.GONE);
@@ -197,6 +193,13 @@ private TextView textnombre,textcorreo,textgenero;
             correo_pe.setVisibility(View.GONE);
             spinner.setVisibility(View.GONE);
             btn_editar.setVisibility(View.GONE);
+        }
+        if(value==2){
+            linearLayout.setVisibility(View.GONE);
+            btn_editar.setVisibility(View.VISIBLE);
+            spinner.setEnabled(false);
+            nombre_pe.setEnabled(false);
+            correo_pe.setEnabled(false);
         }
         Intent myIntent = getIntent();
         String datos = myIntent.getStringExtra(Constants.PREFERENCE_USER_DATA);

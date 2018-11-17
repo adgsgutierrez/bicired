@@ -221,12 +221,17 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                 if(ListPoints.size() == 2){
                     ListPoints.clear();
                     map.clear();
+
                 }
                 ListPoints.add(latLng);
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
 
                 if(ListPoints.size() == 1){
+                    lt1.setText("");
+                    lt2.setText("");
+                    ln1.setText("");
+                    ln2.setText("");
                   markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 }else{
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));

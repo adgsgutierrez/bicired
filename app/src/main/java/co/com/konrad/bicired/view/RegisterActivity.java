@@ -77,17 +77,17 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void Register(View v){
-        String genero = generodefinitivo.getText().toString();
-        String nombre_re = nombre.getText().toString();
-        String clave_re = clave.getText().toString();
-        String clave_re_co = confirmacion_clave.getText().toString();
-        String correo_re = correo.getText().toString();
+        String genero = generodefinitivo.getText().toString().trim();
+        String nombre_re = nombre.getText().toString().trim();
+        String clave_re = clave.getText().toString().trim();
+        String clave_re_co = confirmacion_clave.getText().toString().trim();
+        String correo_re = correo.getText().toString().trim();
 
         if(!genero.equals("") && !nombre_re.equals("") && !clave_re.equals("") && !clave_re_co.equals("") && !correo_re.equals("")) {
              if(!clave_re.equals(clave_re_co)){
                  Utils.mostrarAlerta(this , getString(R.string.mensaje_error_not_inputs4));
              }
-             if(!validarEmail(correo_re)){
+             else if(!validarEmail(correo_re)){
                  Utils.mostrarAlerta(this , getString(R.string.MENSAJE_ERROR_EMAIL));
              }else{
 
