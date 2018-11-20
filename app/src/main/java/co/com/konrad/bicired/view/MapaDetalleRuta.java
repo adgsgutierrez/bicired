@@ -26,6 +26,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
@@ -40,6 +42,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import co.com.konrad.bicired.R;
+import co.com.konrad.bicired.logic.ArrayPoint;
+import co.com.konrad.bicired.logic.Point;
 import co.com.konrad.bicired.utils.Constants;
 import co.com.konrad.bicired.utils.DirectionsJSONParser;
 
@@ -54,62 +58,79 @@ public class MapaDetalleRuta extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent myIntent = getIntent();
-
+        Gson gson = new Gson();
         final String correo = myIntent.getStringExtra(Constants.PREFERENCE_USER);
         final String evento = myIntent.getStringExtra(Constants.PARAMETRO_EVENTO);
 
-        String ltd_o = myIntent.getStringExtra(Constants.PARAMETRO_LATITUD_ORIGEN);
-        String lng_o = myIntent.getStringExtra(Constants.PARAMETRO_LONGITUD_ORIGEN);
-        String ltd_r = myIntent.getStringExtra(Constants.PARAMETRO_LATITUD_DESTINO);
-        String lng_r = myIntent.getStringExtra(Constants.PARAMETRO_LONGITUD_DESTINO);
+        String ruta = myIntent.getStringExtra(Constants.PARAMETRO_RUTA);
+        Log.e(Constants.TAG_LOG , ruta);
+
+        final ArrayList<Point> puntosRuta = gson.fromJson(ruta , new TypeToken<ArrayList<Point>>() {}.getType());
 
         PolylineOptions polyLineOptions = null;
-        ArrayList<LatLng> points = null;
-        points = new ArrayList<LatLng>();
         polyLineOptions = new PolylineOptions();
 
-        final double lat = Double.parseDouble(ltd_o);
-        final double lng = Double.parseDouble(lng_o);
-        final double lat1 = Double.parseDouble(ltd_r);
-        final double lng1 = Double.parseDouble(lng_r);
-
         final PolylineOptions polilinea = polyLineOptions;
-        SupportMapFragment mapFragment  = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 googleMapView = googleMap;
-                LatLng position = new LatLng(lat, lng);
-                LatLng position1 = new LatLng(lat1, lng1);
                 // Creating a marker inicio
                 MarkerOptions markerOptions = new MarkerOptions();
                 MarkerOptions markerOptions1 = new MarkerOptions();
-
                 int height = 60;
                 int width = 60;
-                BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.start);
-                BitmapDrawable bitmapdraw1=(BitmapDrawable)getResources().getDrawable(R.drawable.end);
-                Bitmap b=bitmapdraw.getBitmap();
-                Bitmap b1=bitmapdraw1.getBitmap();
+                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.start);
+                BitmapDrawable bitmapdraw1 = (BitmapDrawable) getResources().getDrawable(R.drawable.end);
+                Bitmap b = bitmapdraw.getBitmap();
+                Bitmap b1 = bitmapdraw1.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
                 Bitmap smallMarker1 = Bitmap.createScaledBitmap(b1, width, height, false);
-
                 markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                 markerOptions1.icon(BitmapDescriptorFactory.fromBitmap(smallMarker1));
-
+                Point pointStart = puntosRuta.get(0);
+                double lat = Double.parseDouble(pointStart.getLatitud());
+                double lng = Double.parseDouble(pointStart.getLongitud());
+                LatLng position = new LatLng(lat, lng);
+                Point pointEnd = puntosRuta.get(puntosRuta.size() -1);
                 markerOptions.position(position);
                 markerOptions.title("Inicia tu ruta aquí");
+
+                double lat1 = Double.parseDouble(pointEnd.getLatitud());
+                double lng1 = Double.parseDouble(pointEnd.getLongitud());
+                LatLng position1 = new LatLng(lat1, lng1);
                 markerOptions1.position(position1);
                 markerOptions1.title("Finaliza tu ruta aquí");
 
-
                 // Getting URL to the Google Directions API
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position , 15));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
                 googleMap.addMarker(markerOptions);
                 googleMap.addMarker(markerOptions1);
-                String url = getDirectionsUrl(position, position1);
-                DownloadTask downloadTask = new DownloadTask();
-                downloadTask.execute(url);
+               // String url = getDirectionsUrl(position, position1);
+               // DownloadTask downloadTask = new DownloadTask();
+               // downloadTask.execute(url);
+                ArrayList points = null;
+                PolylineOptions lineOptions = new PolylineOptions();;
+                for (int i = 0; i < puntosRuta.size(); i++) {
+                    points = new ArrayList();
+                    Point point = puntosRuta.get(i);
+                    double lat2 = Double.parseDouble(point.getLatitud());
+                    double lng2 = Double.parseDouble(point.getLongitud());
+                    LatLng positionRuta = new LatLng(lat2, lng2);
+                    points.add(positionRuta);
+                    lineOptions.addAll(points);
+                    lineOptions.width(8);
+                    lineOptions.color(Color.BLUE);
+                    lineOptions.geodesic(true);
+                }
+                if(lineOptions != null) {
+                    googleMapView.addPolyline(lineOptions);
+                }else{
+                    Toast.makeText(getApplicationContext() , getString(R.string.MENSAJE_ERROR_PAINT_ROUTE) , Toast.LENGTH_SHORT).show();
+                }
+
+
 
             }
         });
@@ -119,7 +140,7 @@ public class MapaDetalleRuta extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), FotografiasLista.class);
-                intent.putExtra(Constants.PARAMETRO_EVENTO , evento);
+                intent.putExtra(Constants.PARAMETRO_EVENTO, evento);
                 intent.putExtra(Constants.PREFERENCE_USER, correo);
                 startActivity(intent);
             }
@@ -133,7 +154,8 @@ public class MapaDetalleRuta extends AppCompatActivity {
             }
         });
     }
-
+}
+/*
     //Descarga de URL
     private class DownloadTask extends AsyncTask<String, Void, String> {
         @Override
@@ -216,9 +238,6 @@ public class MapaDetalleRuta extends AppCompatActivity {
         return url;
     }
 
-    /**
-     * A method to download json data from url
-     */
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
@@ -245,3 +264,4 @@ public class MapaDetalleRuta extends AppCompatActivity {
         return data;
     }
 }
+*/

@@ -132,10 +132,7 @@ public class News extends AppCompatActivity {
                                             Intent intent = new Intent(News.this, MapaDetalleRuta.class);
                                             intent.putExtra(Constants.PREFERENCE_USER , Us.getCorreo());
                                             intent.putExtra(Constants.PARAMETRO_EVENTO , news.getNewDao().get(position).getPk_pbl_id());
-                                            intent.putExtra(Constants.PARAMETRO_LATITUD_ORIGEN , news.getNewDao().get(position).getPbl_ltd_origen());
-                                            intent.putExtra(Constants.PARAMETRO_LONGITUD_ORIGEN , news.getNewDao().get(position).getPbl_ltg_origen());
-                                            intent.putExtra(Constants.PARAMETRO_LATITUD_DESTINO , news.getNewDao().get(position).getPbl_ltd_destino());
-                                            intent.putExtra(Constants.PARAMETRO_LONGITUD_DESTINO , news.getNewDao().get(position).getPbl_ltg_destino());
+                                            intent.putExtra(Constants.PARAMETRO_RUTA , news.getNewDao().get(position).getPbl_ruta().toString());
                                             startActivity(intent);
                                         }
                                     });
@@ -192,7 +189,8 @@ public class News extends AppCompatActivity {
             case R.id.exit:
                 SharedPreferences sharedPref = getSharedPreferences(Constants.PREFERENCE_USER, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.clear();
+                editor.putBoolean(Constants.PREFERENCE_USER_IS_LOGIN, false);
+                editor.commit();
                 Intent intentBack = new Intent(this, StartActivity.class);
                 startActivity(intentBack);
                 break;

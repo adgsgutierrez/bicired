@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import co.com.konrad.bicired.R;
 import co.com.konrad.bicired.StartActivity;
+import co.com.konrad.bicired.logic.Point;
 import co.com.konrad.bicired.logic.RespuestaDaoLogin;
 import co.com.konrad.bicired.logic.UsuarioDao;
 import co.com.konrad.bicired.utils.Constants;
@@ -103,6 +104,17 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
          btn_guardar.setVisibility(View.GONE);
          spinner.setVisibility(View.VISIBLE);
 
+            ArrayList<Point> points = new ArrayList<>();
+            Point a = new Point();
+            a.setLatitud(lt1);
+            a.setLongitud(ln1);
+            points.add(a);
+
+            Point b = new Point();
+            b.setLatitud(lt2);
+            b.setLongitud(ln2);
+            points.add(b);
+
             OkHttpClient client = new OkHttpClient()
                     .newBuilder()
                     .connectTimeout(5000 , TimeUnit.MILLISECONDS)
@@ -111,10 +123,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                     .build();
             RequestBody formBody = new FormBody.Builder()
                     .add("fecha", fecha)
-                    .add("lt1", lt1)
-                    .add("ln1",ln1)
-                    .add("lt2", lt2)
-                    .add("ln2", ln2)
+                    .add("ubicacion[0]", points.get(0).toString())
+                    .add("ubicacion[1]", points.get(1).toString())
                     .add("descripcion", "hara un recorrido de "+distancia+" mts")
                     .add("usuario", user.getCorreo())
                     .build();

@@ -49,8 +49,8 @@ public class StartActivity extends AppCompatActivity {
     }
 
     public void onLogin(View v){
-        String correo = this.correo.getText().toString();
-        String clave = this.clave.getText().toString();
+        String correo = this.correo.getText().toString().trim();
+        String clave = this.clave.getText().toString().trim();
         if(!correo.equals("") && !clave.equals("")) {
 
             this.buttonRegistro.setVisibility(View.GONE);
@@ -152,6 +152,13 @@ public class StartActivity extends AppCompatActivity {
     }
     public void mostrarError(String mensaje){
         Utils.mostrarAlerta(this , mensaje);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        Intent intentBack = new Intent(this, SplashActivity.class);
+        startActivity(intentBack);
     }
 
 }
