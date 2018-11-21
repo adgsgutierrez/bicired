@@ -51,7 +51,10 @@ public class StartActivity extends AppCompatActivity {
     public void onLogin(View v){
         String correo = this.correo.getText().toString().trim();
         String clave = this.clave.getText().toString().trim();
-        if(!correo.equals("") && !clave.equals("")) {
+        Boolean emailBoolean = correo.matches(Constants.EMAIL_REG);
+        Boolean claveBoolean = Utils.validacionCorreoPassword(clave,false);
+        Log.e(Constants.TAG_ERROR , "emailBoolean "+emailBoolean+ " claveBoolean "+claveBoolean);
+        if(emailBoolean && claveBoolean) {
 
             this.buttonRegistro.setVisibility(View.GONE);
             this.buttonLogin.setVisibility(View.GONE);

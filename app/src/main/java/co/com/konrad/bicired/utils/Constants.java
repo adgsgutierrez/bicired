@@ -28,4 +28,8 @@ public class Constants {
 
     public static String PARAMETRO_RUTA = "ParameRuta";
 
+    public static String EMAIL_REGEX = "^[a-zA-Z0-9.!#$%&'*+/=?^_`\\\\{|\\\\}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+    public static String EMAIL_REG = "^[a-zA-Z0-9.!#$%&'*+/=?^_`\\{|\\}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+    public static String TEXT_REGEX = "^[A-Za-z0-9\\s]+$";
+
 }

@@ -38,14 +38,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import co.com.konrad.bicired.R;
-import co.com.konrad.bicired.logic.ArrayPoint;
 import co.com.konrad.bicired.logic.Point;
 import co.com.konrad.bicired.utils.Constants;
-import co.com.konrad.bicired.utils.DirectionsJSONParser;
 
 public class MapaDetalleRuta extends AppCompatActivity {
 

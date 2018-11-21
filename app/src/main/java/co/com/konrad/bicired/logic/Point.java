@@ -8,12 +8,15 @@ public class Point {
     @Override
     public String toString() {
         return "{" +
-                "latitud=" + latitud +
-                ", longitud=" + longitud +
+                "\"latitud\":" + latitud +
+                ",\"longitud\":" + longitud +
                 '}';
     }
 
     public String getLatitud() {
+        if(latitud==null){
+            return "0";
+        }
         return latitud;
     }
 
@@ -22,6 +25,10 @@ public class Point {
     }
 
     public String getLongitud() {
+
+        if(longitud==null){
+            return "0";
+        }
         return longitud;
     }
 

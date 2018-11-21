@@ -28,7 +28,6 @@ import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import co.com.konrad.bicired.R;
-import co.com.konrad.bicired.StartActivity;
 import co.com.konrad.bicired.logic.Point;
 import co.com.konrad.bicired.logic.RespuestaDaoLogin;
 import co.com.konrad.bicired.logic.UsuarioDao;
@@ -82,6 +81,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                 day = c.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(CreateEventActivity.this, CreateEventActivity.this, year, month, day);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
                 datePickerDialog.show();
 
             }
@@ -115,6 +115,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             b.setLongitud(ln2);
             points.add(b);
 
+            Log.e(Constants.TAG_ERROR , points.toString());
+
             OkHttpClient client = new OkHttpClient()
                     .newBuilder()
                     .connectTimeout(5000 , TimeUnit.MILLISECONDS)
@@ -123,8 +125,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                     .build();
             RequestBody formBody = new FormBody.Builder()
                     .add("fecha", fecha)
-                    .add("ubicacion[0]", points.get(0).toString())
-                    .add("ubicacion[1]", points.get(1).toString())
+                    .add("funcion", "guardar_publicacion")
+                    .add("ubicacion", points.toString())
                     .add("descripcion", "hara un recorrido de "+distancia+" mts")
                     .add("usuario", user.getCorreo())
                     .build();
@@ -132,7 +134,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             Request request = new Request.Builder()
                     .url(Constants.URL_PUBLICACION) // The URL to send the data to
                     .post(formBody)
-                    .addHeader("content-type", "application/json; charset=utf-8")
+                    //.addHeader("content-type", "application/json; charset=utf-8")
+                    .addHeader("content-type","application/x-www-form-urlencoded")
                     .build();
             client.newCall(request).enqueue(new Callback() {
                 @Override

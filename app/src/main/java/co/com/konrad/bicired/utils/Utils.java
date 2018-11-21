@@ -2,6 +2,7 @@ package co.com.konrad.bicired.utils;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -42,5 +43,25 @@ public class Utils {
         });
 
         customDialog.show();
+    }
+
+
+    public static boolean validacionCorreoPassword (String input , Boolean email){
+        //Validacion de campos
+        //Es vacio
+        Log.e(Constants.TAG_ERROR , "Validando -"+input + "- Booleano "+email);
+        if(!input.equals("")){
+            //Es correo
+            if(email){
+                Log.e(Constants.TAG_ERROR , "Validando por email");
+                return (input.matches(Constants.EMAIL_REGEX));
+            }
+            //es input normal
+            else{
+                Log.e(Constants.TAG_ERROR , "Validando por texto");
+                return (input.matches(Constants.TEXT_REGEX));
+            }
+        }
+        return false;
     }
 }

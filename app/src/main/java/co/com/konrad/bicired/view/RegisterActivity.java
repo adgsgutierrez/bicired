@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,10 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 import co.com.konrad.bicired.R;
 import co.com.konrad.bicired.StartActivity;
@@ -83,157 +80,164 @@ public class RegisterActivity extends AppCompatActivity {
         String clave_re_co = confirmacion_clave.getText().toString().trim();
         String correo_re = correo.getText().toString().trim();
 
-        if(!genero.equals("") && !nombre_re.equals("") && !clave_re.equals("") && !clave_re_co.equals("") && !correo_re.equals("")) {
-             if(!clave_re.equals(clave_re_co)){
-                 Utils.mostrarAlerta(this , getString(R.string.mensaje_error_not_inputs4));
-             }
-             else if(!validarEmail(correo_re)){
-                 Utils.mostrarAlerta(this , getString(R.string.MENSAJE_ERROR_EMAIL));
-             }else{
+        Log.e(Constants.TAG_ERROR , "genero -"+genero+"- nombre_re -"+nombre_re+"- clave_re -"+clave_re+ "- clave_re_co -"+clave_re_co + "- correo_re -"+correo_re+"-");
 
-                 boton.setVisibility(View.GONE);
-                 boton2.setVisibility(View.GONE);
-                 spinner.setVisibility(View.VISIBLE);
-                 OkHttpClient client = new OkHttpClient()
-                         .newBuilder()
-                         .connectTimeout(5000 , TimeUnit.MILLISECONDS)
-                         .readTimeout(5000 ,TimeUnit.MILLISECONDS)
-                         .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
-                         .build();
-                 RequestBody formBody = new FormBody.Builder()
-                         .add("correo", correo_re)
-                         .add("nombre", nombre_re)
-                         .add("genero",genero)
-                         .add("clave", clave_re_co)
-                         .build();
-                 Log.d(Constants.TAG_LOG, String.valueOf(formBody));
-                 Request request = new Request.Builder()
-                         .url(Constants.URL_LOGIN) // The URL to send the data to
-                         .put(formBody)
-                         .addHeader("content-type", "application/json; charset=utf-8")
-                         .build();
-                 client.newCall(request).enqueue(new Callback() {
-                     @Override
-                     public void onFailure(Call call, IOException e) {
-                         RegisterActivity.this.runOnUiThread(new Runnable() {
-                             @Override
-                             public void run() {
-                                 boton.setVisibility(View.VISIBLE);
-                                 boton2.setVisibility(View.VISIBLE);
-                                 spinner.setVisibility(View.GONE);
-                                 mostrarError();
-                             }
-                         });
-                     }
+        if(Utils.validacionCorreoPassword(genero , false) &&
+                Utils.validacionCorreoPassword(nombre_re , false)  &&
+                Utils.validacionCorreoPassword(clave_re , false)  &&
+                Utils.validacionCorreoPassword(clave_re_co , false)) {
 
-                     @Override
-                     public void onResponse(Call call, final Response response) throws IOException {
-                         if(response.isSuccessful()) {
-                             final String data = response.body().string();
-                             RegisterActivity.this.runOnUiThread(new Runnable() {
-                                 @Override
-                                 public void run() {
-                                     boton.setVisibility(View.VISIBLE);
-                                     boton2.setVisibility(View.VISIBLE);
-                                     spinner.setVisibility(View.GONE);
-                                     Gson gson = new Gson();
-                                     RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
-                                     if(respuesta.getCodigo() == Constants.SERVICES_OK){
-                                         OkHttpClient client = new OkHttpClient()
-                                                 .newBuilder()
-                                                 .connectTimeout(5000 , TimeUnit.MILLISECONDS)
-                                                 .readTimeout(5000 ,TimeUnit.MILLISECONDS)
-                                                 .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
-                                                 .build();
-                                         RequestBody formBody = new FormBody.Builder()
-                                                 .add("correo", correo.getText().toString())
-                                                 .add("clave", clave.getText().toString())
-                                                 .add("origen", Constants.PLATAFORMA)
-                                                 .add("usuario", "")
-                                                 .add("foto", "")
-                                                 .build();
-                                         Request request = new Request.Builder()
-                                                 .url(Constants.URL_LOGIN) // The URL to send the data to
-                                                 .post(formBody)
-                                                 .addHeader("content-type", "application/json; charset=utf-8")
-                                                 .build();
-                                         client.newCall(request).enqueue(new Callback() {
-                                             @Override
-                                             public void onFailure(Call call, IOException e) {
-                                                 RegisterActivity.this.runOnUiThread(new Runnable() {
-                                                     @Override
-                                                     public void run() {
+            if(!clave_re.equals(clave_re_co)){
+                Utils.mostrarAlerta(this , getString(R.string.mensaje_error_not_inputs4));
+            }
+            else if(Utils.validacionCorreoPassword(correo_re , true)){
+                Utils.mostrarAlerta(this , getString(R.string.MENSAJE_ERROR_EMAIL));
 
-                                                         mostrarError();
-                                                     }
-                                                 });
-                                             }
+            }else{
 
-                                             @Override
-                                             public void onResponse(Call call, final Response response) throws IOException {
+                boton.setVisibility(View.GONE);
+                boton2.setVisibility(View.GONE);
+                spinner.setVisibility(View.VISIBLE);
+                OkHttpClient client = new OkHttpClient()
+                        .newBuilder()
+                        .connectTimeout(5000 , TimeUnit.MILLISECONDS)
+                        .readTimeout(5000 ,TimeUnit.MILLISECONDS)
+                        .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
+                        .build();
+                RequestBody formBody = new FormBody.Builder()
+                        .add("correo", correo_re)
+                        .add("nombre", nombre_re)
+                        .add("genero",genero)
+                        .add("clave", clave_re_co)
+                        .build();
+                Log.d(Constants.TAG_LOG, String.valueOf(formBody));
+                Request request = new Request.Builder()
+                        .url(Constants.URL_LOGIN) // The URL to send the data to
+                        .put(formBody)
+                        .addHeader("content-type", "application/json; charset=utf-8")
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        RegisterActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                boton.setVisibility(View.VISIBLE);
+                                boton2.setVisibility(View.VISIBLE);
+                                spinner.setVisibility(View.GONE);
+                                mostrarError();
+                            }
+                        });
+                    }
 
-                                                 if(response.isSuccessful()) {
-                                                     final String datas = response.body().string();
-                                                     RegisterActivity.this.runOnUiThread(new Runnable() {
-                                                         @Override
-                                                         public void run() {
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException {
+                        if(response.isSuccessful()) {
+                            final String data = response.body().string();
+                            RegisterActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    boton.setVisibility(View.VISIBLE);
+                                    boton2.setVisibility(View.VISIBLE);
+                                    spinner.setVisibility(View.GONE);
+                                    Gson gson = new Gson();
+                                    RespuestaDaoLogin respuesta = gson.fromJson(data , RespuestaDaoLogin.class);
+                                    if(respuesta.getCodigo() == Constants.SERVICES_OK){
+                                        OkHttpClient client = new OkHttpClient()
+                                                .newBuilder()
+                                                .connectTimeout(5000 , TimeUnit.MILLISECONDS)
+                                                .readTimeout(5000 ,TimeUnit.MILLISECONDS)
+                                                .writeTimeout(5000 ,TimeUnit.MILLISECONDS)
+                                                .build();
+                                        RequestBody formBody = new FormBody.Builder()
+                                                .add("correo", correo.getText().toString())
+                                                .add("clave", clave.getText().toString())
+                                                .add("origen", Constants.PLATAFORMA)
+                                                .add("usuario", "")
+                                                .add("foto", "")
+                                                .build();
+                                        Request request = new Request.Builder()
+                                                .url(Constants.URL_LOGIN) // The URL to send the data to
+                                                .post(formBody)
+                                                .addHeader("content-type", "application/json; charset=utf-8")
+                                                .build();
+                                        client.newCall(request).enqueue(new Callback() {
+                                            @Override
+                                            public void onFailure(Call call, IOException e) {
+                                                RegisterActivity.this.runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
 
-                                                             Gson gson = new Gson();
-                                                             RespuestaDaoLogin respuesta2 = gson.fromJson(datas , RespuestaDaoLogin.class);
-                                                             if(respuesta2.getCodigo() == Constants.SERVICES_OK){
-                                                                 Log.d(Constants.TAG_LOG,respuesta2.getDatos().toString());
-                                                                 Intent intent = new Intent(getApplicationContext(), News.class);
-                                                                 try {
-                                                                     intent.putExtra(Constants.PREFERENCE_USER_DATA ,respuesta2.getDatos().toString());
-                                                                     startActivity(intent);
-                                                                 }catch (Exception ex){
-                                                                     Log.e(Constants.TAG_LOG , ex.getMessage());
-                                                                     mostrarError();
-                                                                 }
+                                                        mostrarError();
+                                                    }
+                                                });
+                                            }
 
-                                                             }else{
-                                                                 mostrarError(respuesta2.getMensaje());
-                                                             }
+                                            @Override
+                                            public void onResponse(Call call, final Response response) throws IOException {
 
-                                                         }
-                                                     });
-                                                 }else{
-                                                     RegisterActivity.this.runOnUiThread(new Runnable() {
-                                                         @Override
-                                                         public void run() {
-                                                             boton.setVisibility(View.VISIBLE);
-                                                             boton2.setVisibility(View.VISIBLE);
-                                                             spinner.setVisibility(View.GONE);
-                                                             mostrarError();
-                                                         }
-                                                     });
-                                                 }
-                                             }
-                                         });
+                                                if(response.isSuccessful()) {
+                                                    final String datas = response.body().string();
+                                                    RegisterActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
 
-                                     }else{
-                                         boton.setVisibility(View.VISIBLE);
-                                         boton2.setVisibility(View.VISIBLE);
-                                         spinner.setVisibility(View.GONE);
-                                         mostrarError(respuesta.getMensaje());
-                                     }
+                                                            Gson gson = new Gson();
+                                                            RespuestaDaoLogin respuesta2 = gson.fromJson(datas , RespuestaDaoLogin.class);
+                                                            if(respuesta2.getCodigo() == Constants.SERVICES_OK){
+                                                                Log.d(Constants.TAG_LOG,respuesta2.getDatos().toString());
+                                                                Intent intent = new Intent(getApplicationContext(), News.class);
+                                                                try {
+                                                                    intent.putExtra(Constants.PREFERENCE_USER_DATA ,respuesta2.getDatos().toString());
+                                                                    startActivity(intent);
+                                                                }catch (Exception ex){
+                                                                    Log.e(Constants.TAG_LOG , ex.getMessage());
+                                                                    mostrarError();
+                                                                }
 
-                                 }
-                             });
-                         }else{
-                             RegisterActivity.this.runOnUiThread(new Runnable() {
-                                 @Override
-                                 public void run() {
-                                     boton.setVisibility(View.VISIBLE);
-                                     boton2.setVisibility(View.VISIBLE);
-                                     spinner.setVisibility(View.GONE);
-                                     mostrarError();
-                                 }
-                             });
-                         }
-                     }
-                 });
-             }
+                                                            }else{
+                                                                mostrarError(respuesta2.getMensaje());
+                                                            }
+
+                                                        }
+                                                    });
+                                                }else{
+                                                    RegisterActivity.this.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            boton.setVisibility(View.VISIBLE);
+                                                            boton2.setVisibility(View.VISIBLE);
+                                                            spinner.setVisibility(View.GONE);
+                                                            mostrarError();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+
+                                    }else{
+                                        boton.setVisibility(View.VISIBLE);
+                                        boton2.setVisibility(View.VISIBLE);
+                                        spinner.setVisibility(View.GONE);
+                                        mostrarError(respuesta.getMensaje());
+                                    }
+
+                                }
+                            });
+                        }else{
+                            RegisterActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    boton.setVisibility(View.VISIBLE);
+                                    boton2.setVisibility(View.VISIBLE);
+                                    spinner.setVisibility(View.GONE);
+                                    mostrarError();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
         }
         else{
             Utils.mostrarAlerta(this , getString(R.string.mensaje_error_not_inputs3));
@@ -253,9 +257,5 @@ public class RegisterActivity extends AppCompatActivity {
     public void mostrarError(String mensaje){
         Utils.mostrarAlerta(this , mensaje);
     }
-
-    private boolean validarEmail(String email) {
-        Pattern pattern = Patterns.EMAIL_ADDRESS;
-        return pattern.matcher(email).matches();
-    }
 }
+

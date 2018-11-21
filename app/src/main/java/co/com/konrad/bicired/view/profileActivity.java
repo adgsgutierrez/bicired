@@ -100,7 +100,10 @@ private TextView textnombre,textcorreo,textgenero;
         String correo = correo_pe.getText().toString().trim();
         String nombre = nombre_pe.getText().toString().trim();
         String genero = genero_pe.getText().toString().trim();
-        if (!nombre.equals("") && !correo.equals("")) {
+
+        if (Utils.validacionCorreoPassword(correo , true) &&
+                Utils.validacionCorreoPassword(nombre, false) &&
+                Utils.validacionCorreoPassword(genero , false)) {
             OkHttpClient client = new OkHttpClient()
                     .newBuilder()
                     .connectTimeout(5000, TimeUnit.MILLISECONDS)
